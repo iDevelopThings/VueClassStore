@@ -9,8 +9,8 @@ module.exports = {
 //		package : './src/index.ts',
 	},
 	output      : {
-		path       : path.resolve(__dirname, './dist'),
-		publicPath : '/dist/',
+		path       : path.resolve(__dirname, './apptestdist'),
+		publicPath : '/apptestdist/',
 		filename   : '[name].js',
 	},
 	module      : {
