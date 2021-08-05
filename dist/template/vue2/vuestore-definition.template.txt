@@ -1,2 +1,2 @@
 		/** @type {{{name}}} */
-		Vue.prototype.${{camelName}} = {{camelName}};
+		Vue.prototype.${{globalName}} = {{camelName}};
