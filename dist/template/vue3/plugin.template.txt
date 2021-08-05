@@ -1,0 +1,7 @@
+{{imports}}
+
+export default {
+	install : (app, options) => {
+{{definitions}}
+	}
+};

@@ -13,11 +13,11 @@ cp package.json dist/package.json
 
 PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
 
-cd dist || exit
-
 git add package.json
 git add dist
 git commit -m "Increment package version to $PACKAGE_VERSION"
+
+cd dist || exit
 
 npm publish --access public
 
