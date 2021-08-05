@@ -1,7 +1,0 @@
-declare module '@vue/runtime-core' {
-	{{imports}}
-
-	interface ComponentCustomProperties {
-{{definitions}}
-	}
-}

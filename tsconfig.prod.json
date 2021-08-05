@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./package/",
+    "outDir": "./dist/",
     "sourceMap": true,
     "strict": false,
     "module": "CommonJS",
@@ -20,11 +20,5 @@
   },
   "include": [
     "./src/**/*"
-  ],
-  "exclude": [
-    "./apptest/**/*",
-    "./dist/**/*",
-    "./package/**/*",
-    "./node_modules/**/*",
   ]
 }
