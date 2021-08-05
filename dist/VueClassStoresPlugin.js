@@ -156,10 +156,11 @@ var VueClassStoresPlugin = /** @class */ (function () {
      * and additional type completion etc in other places.
      */
     VueClassStoresPlugin.prototype.generateTypeDefs = function () {
+        var _this = this;
         var template = this.getTemplate('typedef');
         template = template
             .replaceAll('{{imports}}', this.pluginStoreImports)
-            .replaceAll('{{definitions}}', this.stores.map(function (m) { return "\t\t$" + m.camelName + " : " + m.name; }).join(",\n"));
+            .replaceAll('{{definitions}}', this.stores.map(function (m) { return "\t\t$" + (_this.shortVueDeclaration ? m.shortCamelName : m.camelName) + " : " + m.name; }).join(",\n"));
         fs.writeFileSync(this.definitionsFilePath, template);
     };
     /**
@@ -168,12 +169,11 @@ var VueClassStoresPlugin = /** @class */ (function () {
      * instances of our stores.
      */
     VueClassStoresPlugin.prototype.generatePlugin = function () {
-        var _this = this;
         var template = this.getTemplate('plugin');
         var defTemplate = this.getTemplate('vuestore-definition');
         var definitions = this.stores.map(function (module) { return defTemplate
             .replaceAll('{{name}}', module.name)
-            .replaceAll('{{camelName}}', _this.shortVueDeclaration ? module.shortCamelName : module.camelName); }).join("\n");
+            .replaceAll('{{camelName}}', module.camelName); }).join("\n");
         var imports = this.vuePluginStoreImports + this.pluginStoreImports;
         template = template
             .replaceAll('{{imports}}', imports)
