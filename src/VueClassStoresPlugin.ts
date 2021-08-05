@@ -218,7 +218,7 @@ export class VueClassStoresPlugin {
 		template = template
 			.replaceAll('{{imports}}', this.pluginStoreImports)
 			.replaceAll('{{definitions}}',
-				this.stores.map(m => `\t\t$${m.camelName} : ${m.name}`).join(",\n"),
+				this.stores.map(m => `\t\t$${this.shortVueDeclaration ? m.shortCamelName : m.camelName} : ${m.name}`).join(",\n"),
 			);
 
 		fs.writeFileSync(this.definitionsFilePath, template);
@@ -235,7 +235,7 @@ export class VueClassStoresPlugin {
 
 		const definitions = this.stores.map(module => defTemplate
 			.replaceAll('{{name}}', module.name)
-			.replaceAll('{{camelName}}', this.shortVueDeclaration ? module.shortCamelName : module.camelName),
+			.replaceAll('{{camelName}}', module.camelName),
 		).join("\n");
 
 		let imports = this.vuePluginStoreImports + this.pluginStoreImports;
