@@ -1,4 +1,4 @@
-import {Store} from "../../../package";
+import {Store} from "../../../dist";
 import {userAuthStore} from "../Plugin/VueStores";
 
 type UserStoreState = {

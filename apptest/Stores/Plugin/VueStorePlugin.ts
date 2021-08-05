@@ -5,10 +5,10 @@ import {UserStore} from "../User/UserStore";
 export default {
 	install : (Vue, options) => {
 		/** @type {UserAuthStore} */
-		Vue.prototype.$userAuthStore = userAuthStore;
+		Vue.prototype.$userAuth = userAuthStore;
 
 		/** @type {UserStore} */
-		Vue.prototype.$userStore = userStore;
+		Vue.prototype.$user = userStore;
 
 	}
 };

@@ -103,6 +103,7 @@ var VueClassStoresPlugin = /** @class */ (function () {
                 isInSubDir: isSubDir,
                 shortName: shortName,
                 shortCamelName: shortCamelName,
+                globalName: this.shortVueDeclaration ? shortCamelName : camelName,
             });
         }
     };
@@ -173,7 +174,8 @@ var VueClassStoresPlugin = /** @class */ (function () {
         var defTemplate = this.getTemplate('vuestore-definition');
         var definitions = this.stores.map(function (module) { return defTemplate
             .replaceAll('{{name}}', module.name)
-            .replaceAll('{{camelName}}', module.camelName); }).join("\n");
+            .replaceAll('{{camelName}}', module.camelName)
+            .replaceAll('{{globalName}}', module.globalName); }).join("\n");
         var imports = this.vuePluginStoreImports + this.pluginStoreImports;
         template = template
             .replaceAll('{{imports}}', imports)

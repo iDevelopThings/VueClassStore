@@ -1,7 +1,7 @@
 const path                 = require('path');
 const webpack              = require('webpack');
 const {VueLoaderPlugin}    = require('vue-loader');
-const {WebpackStoreLoader} = require('./package/WebpackPlugin.js');
+const {VueClassStoresPlugin} = require('./dist');
 
 module.exports = {
 	entry       : {
@@ -47,12 +47,12 @@ module.exports = {
 	},
 	plugins     : [
 		new VueLoaderPlugin(),
-		new WebpackStoreLoader(
-			true,
-			'apptest/Stores/Plugin',
-			'apptest/Stores',
-			'..',
-		),
+		new VueClassStoresPlugin({
+			usingTypescript     : true,
+			shortVueDeclaration : true,
+			pluginDirectory     : 'apptest/Stores/Plugin',
+			storesDirectory     : 'apptest/Stores',
+		}),
 	],
 	resolve     : {
 		extensions : ['.ts', '.js', '.vue', '.json'],

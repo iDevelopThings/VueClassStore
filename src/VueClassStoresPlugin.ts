@@ -10,6 +10,7 @@ type StoreModule = {
 	fileName: string | undefined,
 	name: string | undefined,
 	camelName: string | undefined,
+	globalName: string | undefined,
 	absolutePath: string,
 	relativePath: string,
 	shortName: string,
@@ -144,6 +145,7 @@ export class VueClassStoresPlugin {
 				isInSubDir   : isSubDir,
 				shortName,
 				shortCamelName,
+				globalName   : this.shortVueDeclaration ? shortCamelName : camelName,
 			});
 		}
 	}
@@ -235,7 +237,8 @@ export class VueClassStoresPlugin {
 
 		const definitions = this.stores.map(module => defTemplate
 			.replaceAll('{{name}}', module.name)
-			.replaceAll('{{camelName}}', module.camelName),
+			.replaceAll('{{camelName}}', module.camelName)
+			.replaceAll('{{globalName}}', module.globalName),
 		).join("\n");
 
 		let imports = this.vuePluginStoreImports + this.pluginStoreImports;

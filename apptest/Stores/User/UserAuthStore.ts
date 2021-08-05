@@ -1,4 +1,4 @@
-import {Store} from "../../../package";
+import {Store} from "../../../dist";
 
 type UserAuthStoreState = {
 	user: object;
