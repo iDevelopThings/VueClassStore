@@ -36,16 +36,20 @@ const {WebpackStoreLoader} = require('vue-class-stores');
 //....
 
 plugins : [
-	new VueClassStoresPlugin(
-    // true = Using typescript
-    // false = Using javascript
-    // Ensure you set this correctly!  
-		true,
-    // Where you want type definitions and the plugin to be defined
-		'src/Stores/Plugin',
-    // Where your store classes are located
-		'src/Stores'
-	),
+	new VueClassStoresPlugin({
+		// true = Using typescript
+		// false = Using javascript
+		// Ensure you set this correctly!  
+		usingTypescript : false,
+		// Where you want type definitions and the plugin to be defined
+		pluginDirectory : 'src/Stores/Plugin',
+		// Where your store classes are located
+		storesDirectory : 'src/Stores',
+		// When creating the global vue reference
+		// shortVueDeclaration = true = $user
+		// shortVueDeclaration = false = $userStore
+		shortVueDeclaration : false,
+	})
 ]
 ```
 

@@ -1,4 +1,12 @@
+declare type Configuration = {
+    usingTypescript?: boolean;
+    pluginDirectory?: string;
+    storesDirectory?: string;
+    pluginStoresImport?: string;
+    shortVueDeclaration?: boolean;
+};
 export declare class VueClassStoresPlugin {
+    private shortVueDeclaration;
     private usingTypescript;
     private pluginDirectory;
     private pluginStoresImport;
@@ -15,7 +23,7 @@ export declare class VueClassStoresPlugin {
     private vueStorePluginFilePath;
     private fullFileNames;
     private fileNames;
-    constructor(usingTypescript?: boolean, pluginDirectory?: string, storesDirectory?: string, pluginStoresImport?: string);
+    constructor(configuration: Configuration);
     apply(compiler: any): void;
     prepare(): void;
     cleanFiles(): void;
@@ -57,3 +65,4 @@ export declare class VueClassStoresPlugin {
     camelize(str: any): any;
     getVueVersion(): any;
 }
+export {};

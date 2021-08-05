@@ -23,19 +23,31 @@ var requireContext = require('require-context');
 var semver = require('semver');
 var packageJson = require(path.resolve(process.cwd(), 'package.json'));
 var VueClassStoresPlugin = /** @class */ (function () {
-    function VueClassStoresPlugin(usingTypescript, pluginDirectory, storesDirectory, pluginStoresImport) {
-        if (usingTypescript === void 0) { usingTypescript = false; }
-        if (pluginDirectory === void 0) { pluginDirectory = 'src/Stores/Plugin'; }
-        if (storesDirectory === void 0) { storesDirectory = 'src/Stores'; }
-        if (pluginStoresImport === void 0) { pluginStoresImport = '..'; }
+    function VueClassStoresPlugin(configuration) {
+        this.shortVueDeclaration = false;
+        this.usingTypescript = false;
+        this.pluginDirectory = 'src/Stores/Plugin';
+        this.pluginStoresImport = '..';
+        this.storesDirectory = 'src/Stores';
         this.stores = [];
         this.storeExports = "";
         this.pluginStoreImports = "";
         this.vuePluginStoreImports = "";
-        this.usingTypescript = usingTypescript;
-        this.pluginDirectory = pluginDirectory;
-        this.storesDirectory = storesDirectory;
-        this.pluginStoresImport = pluginStoresImport;
+        if (configuration.usingTypescript) {
+            this.usingTypescript = configuration.usingTypescript;
+        }
+        if (configuration.pluginDirectory) {
+            this.pluginDirectory = configuration.pluginDirectory;
+        }
+        if (configuration.storesDirectory) {
+            this.storesDirectory = configuration.storesDirectory;
+        }
+        if (configuration.pluginStoresImport) {
+            this.pluginStoresImport = configuration.pluginStoresImport;
+        }
+        if (configuration.shortVueDeclaration) {
+            this.shortVueDeclaration = configuration.shortVueDeclaration;
+        }
         this.vueVersion = this.getVueVersion();
         this.fileExtension = this.usingTypescript ? '.ts' : '.js';
         this.storesPath = path.resolve.apply(path, this.storesDirectory.split('/'));
@@ -79,7 +91,9 @@ var VueClassStoresPlugin = /** @class */ (function () {
             var _a = files_1[_i], filePath = _a.filePath, stat = _a.stat, isSubDir = _a.isSubDir;
             var fileName = filePath.split('/').pop();
             var name_1 = fileName.split('.').shift();
+            var shortName = fileName.split('.').shift().replace('Store', '');
             var camelName = this.camelize(name_1);
+            var shortCamelName = this.camelize(name_1).replace('Store', '');
             this.stores.push({
                 fileName: fileName,
                 name: name_1,
@@ -87,6 +101,8 @@ var VueClassStoresPlugin = /** @class */ (function () {
                 absolutePath: filePath,
                 relativePath: filePath.replace(this.storesPath + '/', '').split('.')[0],
                 isInSubDir: isSubDir,
+                shortName: shortName,
+                shortCamelName: shortCamelName,
             });
         }
     };
@@ -152,11 +168,12 @@ var VueClassStoresPlugin = /** @class */ (function () {
      * instances of our stores.
      */
     VueClassStoresPlugin.prototype.generatePlugin = function () {
+        var _this = this;
         var template = this.getTemplate('plugin');
         var defTemplate = this.getTemplate('vuestore-definition');
         var definitions = this.stores.map(function (module) { return defTemplate
             .replaceAll('{{name}}', module.name)
-            .replaceAll('{{camelName}}', module.camelName); }).join("\n");
+            .replaceAll('{{camelName}}', _this.shortVueDeclaration ? module.shortCamelName : module.camelName); }).join("\n");
         var imports = this.vuePluginStoreImports + this.pluginStoreImports;
         template = template
             .replaceAll('{{imports}}', imports)
