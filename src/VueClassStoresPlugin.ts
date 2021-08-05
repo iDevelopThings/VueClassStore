@@ -13,7 +13,7 @@ type StoreModule = {
 	isInSubDir: boolean
 }
 
-export class WebpackStoreLoader {
+export class VueClassStoresPlugin {
 	private usingTypescript: boolean;
 	private pluginDirectory: string;
 	private pluginStoresImport: string;
@@ -224,8 +224,15 @@ export class WebpackStoreLoader {
 	}
 
 	getTemplate(name) {
+		let rootPackageDir = process.cwd();
+
+		//Hacky fix to properly reference the packages directory
+		if (!process.cwd().includes('/Packages/VueClassStore')) {
+			rootPackageDir = path.join(process.cwd(), 'node_modules', 'vue-class-stores');
+		}
+
 		return fs.readFileSync(
-			path.resolve(process.cwd(), 'template', `vue${this.vueVersion}`, `${name}.template.txt`),
+			path.resolve(rootPackageDir, 'template', `vue${this.vueVersion}`, `${name}.template.txt`),
 			{encoding : 'utf-8'},
 		);
 	}
