@@ -1,9 +1,7 @@
 {
   "name": "vue-class-stores",
   "version": "0.0.1",
-  "private": false,
-  "description": "",
-  "main": "index.js",
+  "description": "Use classes to handle state in vuejs. This is a webpack plugin that will generate type definitions and globally init your stores.\n\nTopics\nResources\n",
   "scripts": {
     "build": "webpack --mode=development",
     "prod": "webpack --mode=production",
@@ -16,11 +14,11 @@
     "name": "iDevelopThings",
     "url": "https://github.com/iDevelopThings"
   },
-  "license": "",
+  "license": "MIT",
   "files": [
     "template/**/*",
     "WebpackStoreLoader.js",
-    "src/**/*"
+    "package/**/*"
   ],
   "dependencies": {
     "loader-utils": "^2.0.0",
