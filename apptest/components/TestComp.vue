@@ -1,7 +1,6 @@
 <template>
 	<div>
-		{{$someStore.message}}
-		{{$someOtherStore.yeet}}
+		{{$userStore.message}}
 	</div>
 </template>
 

@@ -1,3 +1,12 @@
 dist/
 node_modules/
 .DS_Store
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/jsLibraryMappings.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/README.md
+/.idea/vcs.xml
+/.idea/VueClassStore.iml
