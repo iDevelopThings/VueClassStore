@@ -1,6 +1,5 @@
-yarn build-package
 rm -R dist
-cp -R package dist
+yarn build-package
 cp -R template dist/template
 cp package.json dist/package.json
 cp README.md dist/README.md
