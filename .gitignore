@@ -9,3 +9,4 @@ node_modules/
 /.idea/vcs.xml
 /.idea/VueClassStore.iml
 /apptestdist/
+/package/
