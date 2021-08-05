@@ -33,19 +33,19 @@ var VueClassStoresPlugin = /** @class */ (function () {
         this.storeExports = "";
         this.pluginStoreImports = "";
         this.vuePluginStoreImports = "";
-        if (configuration.usingTypescript) {
+        if (configuration.usingTypescript !== undefined) {
             this.usingTypescript = configuration.usingTypescript;
         }
-        if (configuration.pluginDirectory) {
+        if (configuration.pluginDirectory !== undefined) {
             this.pluginDirectory = configuration.pluginDirectory;
         }
-        if (configuration.storesDirectory) {
+        if (configuration.storesDirectory !== undefined) {
             this.storesDirectory = configuration.storesDirectory;
         }
-        if (configuration.pluginStoresImport) {
+        if (configuration.pluginStoresImport !== undefined) {
             this.pluginStoresImport = configuration.pluginStoresImport;
         }
-        if (configuration.shortVueDeclaration) {
+        if (configuration.shortVueDeclaration !== undefined) {
             this.shortVueDeclaration = configuration.shortVueDeclaration;
         }
         this.vueVersion = this.getVueVersion();
