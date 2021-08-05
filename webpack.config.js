@@ -45,6 +45,7 @@ module.exports           = {
 	plugins     : [
 		new VueLoaderPlugin(),
 		new WebpackStoreLoader(
+			true,
 			'apptest/Stores/Plugin',
 			'apptest/Stores',
 			'..',

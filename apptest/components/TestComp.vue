@@ -1,6 +1,9 @@
 <template>
 	<div>
-		{{$userStore.message}}
+		<p>$userStore.message : {{$userStore.message}}</p>
+		<p>$userAuthStore.message : {{$userAuthStore.message}}</p>
+
+		<button @click="$userStore.setMessage()">set</button>
 	</div>
 </template>
 

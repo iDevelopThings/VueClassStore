@@ -1,6 +1,6 @@
 # Vue Class Stores
 
-To quickly get started, you can view apptest directory to view a full working example. There's also a webpack.config.js showing the implementation... or you can
+To quickly get started, you can navigate into the apptest directory to view a full working example. There's also a webpack.config.js showing the implementation... or you can
 continue reading.
 
 ## Why?
@@ -20,25 +20,49 @@ entirely different class/location.
 
 ## Getting Started
 
+**Install the package**
 ```shell
 npm install VueClassStore
 yarn add VueClassStore
 ```
 
-Add to your webpack configuration:
+**Add to your webpack configuration:**
 
 ```js
 plugins : [
 	new WebpackStoreLoader(
+	  // true = Using typescript
+    // false = Using javascript
+    // Ensure you set this correctly!  
+		true, 
 		// Where you want type definitions and the plugin to be defined
-		'apptest/Stores/Plugin',
+		'src/Stores/Plugin',
 		// Where your store classes are located
-		'apptest/Stores'
+		'src/Stores'
 	),
 ]
 ```
 
-Create a store:
+**Run a build of your application**
+
+Now if you navigate to /src/Stores/ you will see a **Plugin** directory. These are the files that this package has built for you.
+
+**VueStorePlugin** - This is an auto generated plugin for initiating your stores and registering them with Vue.
+
+**VueStores** - This is an export of all your stores that will maintain state, it will allow you to use your stores in different classes and such.
+
+**VueStoresTypeDefinitions.d.ts** - This should help your ide understand that you're using a store in your vuejs templates and understand that they're registered with Vue.
+
+**You can now add the plugin to your vue app**
+```ts
+import VueStorePlugin from "./Stores/Plugin/VueStorePlugin";
+
+Vue.use(VueStorePlugin);
+
+const app = new Vue({el : "#app"});
+```
+
+**Create a store:**
 
 If you're using typescript, you can create a type for your store object and provide this as a generic to Store
 

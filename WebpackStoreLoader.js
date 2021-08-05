@@ -1,15 +1,19 @@
 const fs             = require('fs');
 const path           = require('path');
 const requireContext = require('require-context');
+const semver         = require('semver');
+const packageJson    = require('./package.json');
 
 class WebpackStoreLoader {
 
 	constructor(
+		usingTypescript    = false,
 		pluginDirectory    = 'src/Stores/Plugin',
 		storesDirectory    = 'src/Stores',
 		pluginStoresImport = '..',
 	)
 	{
+		this.usingTypescript    = usingTypescript;
 		this.pluginDirectory    = pluginDirectory;
 		this.storesDirectory    = storesDirectory;
 		this.pluginStoresImport = pluginStoresImport;
@@ -27,6 +31,38 @@ class WebpackStoreLoader {
 
 		this.pluginStoreImports    = "";
 		this.vuePluginStoreImports = "";
+		this.storeExports          = "";
+		this.vueVersion            = this.getVueVersion();
+		this.fileExtension         = this.usingTypescript ? '.ts' : '.js';
+
+		this.storesPath = path.resolve(...this.storesDirectory.split('/'));
+
+		this.fullFileNames = {
+			stores      : 'VueStores' + this.fileExtension,
+			definitions : 'VueStoresTypeDefinitions.d.ts',
+			plugin      : 'VueStorePlugin' + this.fileExtension,
+		};
+		this.fileNames     = {
+			stores      : 'VueStores',
+			definitions : 'VueStoresTypeDefinitions',
+			plugin      : 'VueStorePlugin',
+		};
+
+		this.storesFilePath = path.resolve(
+			...this.pluginDirectory.split('/'),
+			this.fullFileNames.stores,
+		);
+
+		this.definitionsFilePath = path.resolve(
+			...this.pluginDirectory.split('/'),
+			this.fullFileNames.definitions,
+		);
+
+		this.vueStorePluginFilePath = path.resolve(
+			...this.pluginDirectory.split('/'),
+			this.fullFileNames.plugin,
+		);
+
 	}
 
 	apply(compiler)
@@ -34,35 +70,21 @@ class WebpackStoreLoader {
 		compiler.hooks.thisCompilation.tap(
 			'WebpackStorePlugin',
 			(compilationParams) => {
-				const location = path.resolve(...this.storesDirectory.split('/'));
 
-				console.log('Directories: ', {
-					location           : location,
-					pluginDirectory    : this.pluginDirectory,
-					storesDirectory    : this.storesDirectory,
-					pluginStoresImport : this.pluginStoresImport,
-				});
+//				console.log('Directories: ', {
+//					pluginDirectory    : this.pluginDirectory,
+//					storesDirectory    : this.storesDirectory,
+//					pluginStoresImport : this.pluginStoresImport,
+//				});
+
+				if (this.vueVersion === null) {
+					console.error('VUE VERSION IS NOT 2 OR 3. CANNOT USE VUE CLASS STORE PLUGIN.');
+					return;
+				}
 
 				this.prepare();
 
-				const files = this.walkDirectory(location);
-
-				for (let {filePath, stat, isSubDir} of files) {
-					const fileName  = filePath.split('/').pop();
-					const name      = fileName.split('.').shift();
-					const camelName = this.camelize(name);
-
-					this.stores.push({
-						fileName,
-						name,
-						camelName,
-						absolutePath : filePath,
-						relativePath : filePath.replace(location + '/', ''),
-						isInSubDir   : isSubDir,
-					});
-				}
-
-				console.log('Stores: ', this.stores);
+//				console.log('Stores: ', this.stores);
 
 				this.processStores();
 
@@ -74,46 +96,47 @@ class WebpackStoreLoader {
 	{
 		this.preparePath(this.pluginDirectory);
 		this.preparePath(this.storesDirectory);
+
+		this.cleanFiles();
+
+		const files = this.walkDirectory(this.storesPath);
+
+		for (let {filePath, stat, isSubDir} of files) {
+			const fileName  = filePath.split('/').pop();
+			const name      = fileName.split('.').shift();
+			const camelName = this.camelize(name);
+
+			this.stores.push({
+				fileName,
+				name,
+				camelName,
+				absolutePath : filePath,
+				relativePath : filePath.replace(this.storesPath + '/', '').split('.')[0],
+				isInSubDir   : isSubDir,
+			});
+		}
+	}
+
+	cleanFiles()
+	{
+		Object.values(this.fullFileNames).forEach(name => {
+			const filePath = path.join(...this.pluginDirectory.split('/'), name);
+
+			if (fs.existsSync(filePath)) {
+				fs.rmSync(filePath);
+			}
+		});
 	}
 
 	processStores()
 	{
 		this.generatePluginStoreImports();
 
-		this.generateStoresFile();
+		this.generateExports();
 
 		this.generateTypeDefs();
 
 		this.generatePlugin();
-	}
-
-	/**
-	 * Ensure that all of our directories exist...
-	 * if they don't, we'll create them
-	 *
-	 * @param pathToPrepare
-	 */
-	preparePath(pathToPrepare)
-	{
-		const pathParts = pathToPrepare.split('/');
-		let pathBuilt   = pathParts[0];
-
-		for (let pathPart of pathParts) {
-
-			if (pathBuilt.includes(pathPart)) {
-				continue;
-			}
-
-			const pathCheck = path.join(pathBuilt, pathPart);
-
-			console.log('PathCheck: ', pathCheck);
-
-			if (!fs.existsSync(pathCheck)) {
-				fs.mkdirSync(pathCheck);
-			}
-
-			pathBuilt = path.join(pathBuilt, pathPart);
-		}
 	}
 
 	generatePluginStoreImports()
@@ -122,79 +145,87 @@ class WebpackStoreLoader {
 			.map(m => `import {${m.name}} from "${this.pluginStoresImport}/${m.relativePath}";`)
 			.join("\n");
 
-		const fileNamesImport = this.stores.map(m => m.camelName).join(', ');
+		let fileNamesImport = this.stores.map(m => m.camelName);
 
-		this.vuePluginStoreImports = `import {${fileNamesImport}} from "./VueStores.js"; \n`;
+		if(this.vueVersion === 3) {
+			fileNamesImport.push(...this.stores.map(m => m.name+'Symbol'))
+		}
+
+		this.vuePluginStoreImports = `import {${fileNamesImport.join(', ')}} from "./${this.fileNames.stores}"; \n`;
 	}
 
-	generateStoresFile()
+	/**
+	 * Generate the contents of VueStores.js
+	 *
+	 * This will contain exports for our stores.
+	 * For example UserStore.ts, will export const userStore = new UserStore();
+	 */
+	generateExports()
 	{
-		let template = `${this.pluginStoreImports} \n `;
+		this.storeExports = '';
 
-		template += this.stores.map(
-			module => [
-				`/** @type {${module.name}} */`,
-				`export const ${module.camelName} = new ${module.name}();`,
-			].join("\n"),
+		const exportsTemplate = this.getTemplate('vuestore-exports');
+
+		if (this.vueVersion === 3) {
+			this.storeExports += "import { inject } from 'vue';\n";
+		}
+
+		this.storeExports += this.pluginStoreImports + "\n";
+
+		this.storeExports += this.stores.map(store => exportsTemplate
+			.replaceAll('{{name}}', store.name)
+			.replaceAll('{{camelName}}', store.camelName),
 		).join("\n");
 
-		fs.writeFileSync(
-			path.resolve(
-				...this.pluginDirectory.split('/'),
-				'VueStores.js',
-			),
-			template,
-		);
+		fs.writeFileSync(this.storesFilePath, this.storeExports);
 	}
 
+	/**
+	 * Generate typescript definitions for our store classes
+	 * This will give us full auto-completion in our .vue single file components
+	 * and additional type completion etc in other places.
+	 */
 	generateTypeDefs()
 	{
-		let template = this.getTemplate('typedef.template.txt');
+		let template = this.getTemplate('typedef');
 
 		template = template
-			.replace('{{imports}}', this.pluginStoreImports)
-			.replace('{{definitions}}',
-				this.stores.map(m => `		$${m.camelName} : ${m.name}`).join(",\n"),
+			.replaceAll('{{imports}}', this.pluginStoreImports)
+			.replaceAll('{{definitions}}',
+				this.stores.map(m => `\t\t$${m.camelName} : ${m.name}`).join(",\n"),
 			);
 
-		fs.writeFileSync(
-			path.resolve(
-				...this.pluginDirectory.split('/'),
-				'vue-class-store-definitions.d.ts',
-			),
-			template,
-		);
+		fs.writeFileSync(this.definitionsFilePath, template);
 	}
 
+	/**
+	 * We generate a vue plugin every time our app builds with webpack.
+	 * This will autoload our store files and define the global vue app
+	 * instances of our stores.
+	 */
 	generatePlugin()
 	{
-		let template = this.getTemplate('plugin.template.txt');
+		let template    = this.getTemplate('plugin');
+		let defTemplate = this.getTemplate('vuestore-definition');
+
+		const definitions = this.stores.map(module => defTemplate
+			.replaceAll('{{name}}', module.name)
+			.replaceAll('{{camelName}}', module.camelName),
+		).join("\n");
+
+		let imports = this.vuePluginStoreImports + this.pluginStoreImports;
 
 		template = template
-			.replace('{{imports}}', this.vuePluginStoreImports + this.pluginStoreImports)
-			.replace('{{definitions}}',
-				this.stores
-					.map(module => [
-							`\t\t/** @type {${module.name}} */`,
-							`\t\tVue.prototype.$${module.camelName} = ${module.camelName};`,
-						].join("\n"),
-					)
-					.join("\n"),
-			);
+			.replaceAll('{{imports}}', imports)
+			.replaceAll('{{definitions}}', definitions);
 
-		fs.writeFileSync(
-			path.resolve(
-				...this.pluginDirectory.split('/'),
-				'VueStorePlugin.js',
-			),
-			template,
-		);
+		fs.writeFileSync(this.vueStorePluginFilePath, template);
 	}
 
 	getTemplate(name)
 	{
 		return fs.readFileSync(
-			path.resolve(process.cwd(), 'template', name),
+			path.resolve(process.cwd(), 'template', `vue${this.vueVersion}`, `${name}.template.txt`),
 			{encoding : 'utf-8'},
 		);
 	}
@@ -227,6 +258,35 @@ class WebpackStoreLoader {
 		return files;
 	}
 
+	/**
+	 * Ensure that all of our directories exist...
+	 * if they don't, we'll create them
+	 *
+	 * @param pathToPrepare
+	 */
+	preparePath(pathToPrepare)
+	{
+		const pathParts = pathToPrepare.split('/');
+		let pathBuilt   = pathParts[0];
+
+		for (let pathPart of pathParts) {
+
+			if (pathBuilt.includes(pathPart)) {
+				continue;
+			}
+
+			const pathCheck = path.join(pathBuilt, pathPart);
+
+//			console.log('PathCheck: ', pathCheck);
+
+			if (!fs.existsSync(pathCheck)) {
+				fs.mkdirSync(pathCheck);
+			}
+
+			pathBuilt = path.join(pathBuilt, pathPart);
+		}
+	}
+
 	camelize(str)
 	{
 		return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
@@ -234,6 +294,23 @@ class WebpackStoreLoader {
 		}).replace(/\s+/g, '');
 	}
 
+	getVueVersion()
+	{
+		const deps = {...packageJson.dependencies, ...packageJson.devDependencies};
+
+		if (!deps?.vue) {
+			console.error('Vuejs is not found in package.json.\nPlease run:\nnpm install vue@next - for vue 3\nnpm install vue - for vue 2');
+			return;
+		}
+
+		const version = semver.coerce(deps.vue);
+
+		if (version.major !== 2 && version.major !== 3) {
+			return null;
+		}
+
+		return version?.major ?? null;
+	}
 }
 
 module.exports = WebpackStoreLoader;
