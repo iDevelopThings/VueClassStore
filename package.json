@@ -22,7 +22,6 @@
   "license": "MIT",
   "files": [
     "template/**/*",
-    "WebpackStoreLoader.js",
     "package/**/*"
   ],
   "dependencies": {
