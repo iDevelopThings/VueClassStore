@@ -1,6 +1,6 @@
 {{imports}}
 
-declare module "vue/types/vue" {
+export declare module "vue/types/vue" {
 	interface Vue {
 {{definitions}}
 	}
