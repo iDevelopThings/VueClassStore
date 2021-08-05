@@ -97,7 +97,7 @@ export class VueClassStoresPlugin {
 	}
 
 	apply(compiler) {
-		compiler.hooks.thisCompilation.tap(
+		compiler.hooks.done.tap(
 			'WebpackStorePlugin',
 			(compilationParams) => {
 				//				console.log('Directories: ', {
