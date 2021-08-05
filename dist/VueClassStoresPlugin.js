@@ -67,7 +67,7 @@ var VueClassStoresPlugin = /** @class */ (function () {
     }
     VueClassStoresPlugin.prototype.apply = function (compiler) {
         var _this = this;
-        compiler.hooks.thisCompilation.tap('WebpackStorePlugin', function (compilationParams) {
+        compiler.hooks.done.tap('WebpackStorePlugin', function (compilationParams) {
             //				console.log('Directories: ', {
             //					pluginDirectory    : this.pluginDirectory,
             //					storesDirectory    : this.storesDirectory,
