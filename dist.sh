@@ -11,13 +11,7 @@ git commit -m "Built assets ready for publishing"
 npm version patch
 cp package.json dist/package.json
 
-# shellcheck disable=SC1073
-PACKAGE_VERSION=$(cat package.json \
-  | grep version \
-  | head -1 \
-  | awk -F: '{ print $2 }' \
-  | sed 's/[",]//g'
-  | tr -d '[[:space:]]')
+PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
 
 cd dist || exit
 
