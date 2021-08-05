@@ -6,7 +6,8 @@
     "build": "webpack --mode=development",
     "prod": "webpack --mode=production",
     "watch": "webpack --watch --mode=development",
-    "build-package": "tsc --build tsconfig.prod.json",
+    "build-package": "tsc --build tsconfig.prod.json --clean && tsc --build tsconfig.prod.json",
+    "build-package-watch": "tsc --build tsconfig.prod.json --clean && tsc --build tsconfig.prod.json --watch",
     "test": "jest"
   },
   "keywords": [],

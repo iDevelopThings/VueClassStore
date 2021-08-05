@@ -1,39 +1,49 @@
-const fs             = require('fs');
 const path           = require('path');
+const fs             = require('fs');
 const requireContext = require('require-context');
 const semver         = require('semver');
-const packageJson    = require('./package.json');
+const packageJson    = require(path.resolve(process.cwd(), 'package.json'));
 
-class WebpackStoreLoader {
+type StoreModule = {
+	fileName: string | undefined,
+	name: string | undefined,
+	camelName: string | undefined,
+	absolutePath: string,
+	relativePath: string,
+	isInSubDir: boolean
+}
+
+export class WebpackStoreLoader {
+	private usingTypescript: boolean;
+	private pluginDirectory: string;
+	private pluginStoresImport: string;
+	private storesDirectory: string;
+	private stores: StoreModule[]         = [];
+	private storeExports: string          = "";
+	private pluginStoreImports: string    = "";
+	private vuePluginStoreImports: string = "";
+	private vueVersion: 2 | 3;
+	private fileExtension: string;
+	private storesPath: string;
+	private storesFilePath: string;
+	private definitionsFilePath: string;
+	private vueStorePluginFilePath: string;
+	private fullFileNames: { plugin: string; stores: string; definitions: string };
+	private fileNames: { plugin: string; stores: string; definitions: string };
 
 	constructor(
 		usingTypescript    = false,
 		pluginDirectory    = 'src/Stores/Plugin',
 		storesDirectory    = 'src/Stores',
 		pluginStoresImport = '..',
-	)
-	{
+	) {
 		this.usingTypescript    = usingTypescript;
 		this.pluginDirectory    = pluginDirectory;
 		this.storesDirectory    = storesDirectory;
 		this.pluginStoresImport = pluginStoresImport;
-		/**
-		 * @type {{
-		 *     fileName : string|undefined,
-		 *     name : string|undefined,
-		 *     camelName : string|undefined,
-		 *     absolutePath : string,
-		 *     relativePath : string,
-		 *     isInSubDir : boolean
-		 * }[]}
-		 */
-		this.stores = [];
 
-		this.pluginStoreImports    = "";
-		this.vuePluginStoreImports = "";
-		this.storeExports          = "";
-		this.vueVersion            = this.getVueVersion();
-		this.fileExtension         = this.usingTypescript ? '.ts' : '.js';
+		this.vueVersion    = this.getVueVersion();
+		this.fileExtension = this.usingTypescript ? '.ts' : '.js';
 
 		this.storesPath = path.resolve(...this.storesDirectory.split('/'));
 
@@ -65,17 +75,15 @@ class WebpackStoreLoader {
 
 	}
 
-	apply(compiler)
-	{
+	apply(compiler) {
 		compiler.hooks.thisCompilation.tap(
 			'WebpackStorePlugin',
 			(compilationParams) => {
-
-//				console.log('Directories: ', {
-//					pluginDirectory    : this.pluginDirectory,
-//					storesDirectory    : this.storesDirectory,
-//					pluginStoresImport : this.pluginStoresImport,
-//				});
+				//				console.log('Directories: ', {
+				//					pluginDirectory    : this.pluginDirectory,
+				//					storesDirectory    : this.storesDirectory,
+				//					pluginStoresImport : this.pluginStoresImport,
+				//				});
 
 				if (this.vueVersion === null) {
 					console.error('VUE VERSION IS NOT 2 OR 3. CANNOT USE VUE CLASS STORE PLUGIN.');
@@ -84,7 +92,7 @@ class WebpackStoreLoader {
 
 				this.prepare();
 
-//				console.log('Stores: ', this.stores);
+				//				console.log('Stores: ', this.stores);
 
 				this.processStores();
 
@@ -92,8 +100,7 @@ class WebpackStoreLoader {
 		);
 	}
 
-	prepare()
-	{
+	prepare() {
 		this.preparePath(this.pluginDirectory);
 		this.preparePath(this.storesDirectory);
 
@@ -117,8 +124,7 @@ class WebpackStoreLoader {
 		}
 	}
 
-	cleanFiles()
-	{
+	cleanFiles() {
 		Object.values(this.fullFileNames).forEach(name => {
 			const filePath = path.join(...this.pluginDirectory.split('/'), name);
 
@@ -128,8 +134,7 @@ class WebpackStoreLoader {
 		});
 	}
 
-	processStores()
-	{
+	processStores() {
 		this.generatePluginStoreImports();
 
 		this.generateExports();
@@ -139,16 +144,15 @@ class WebpackStoreLoader {
 		this.generatePlugin();
 	}
 
-	generatePluginStoreImports()
-	{
+	generatePluginStoreImports() {
 		this.pluginStoreImports = this.stores
 			.map(m => `import {${m.name}} from "${this.pluginStoresImport}/${m.relativePath}";`)
 			.join("\n");
 
 		let fileNamesImport = this.stores.map(m => m.camelName);
 
-		if(this.vueVersion === 3) {
-			fileNamesImport.push(...this.stores.map(m => m.name+'Symbol'))
+		if (this.vueVersion === 3) {
+			fileNamesImport.push(...this.stores.map(m => m.name + 'Symbol'));
 		}
 
 		this.vuePluginStoreImports = `import {${fileNamesImport.join(', ')}} from "./${this.fileNames.stores}"; \n`;
@@ -160,8 +164,7 @@ class WebpackStoreLoader {
 	 * This will contain exports for our stores.
 	 * For example UserStore.ts, will export const userStore = new UserStore();
 	 */
-	generateExports()
-	{
+	generateExports() {
 		this.storeExports = '';
 
 		const exportsTemplate = this.getTemplate('vuestore-exports');
@@ -185,8 +188,7 @@ class WebpackStoreLoader {
 	 * This will give us full auto-completion in our .vue single file components
 	 * and additional type completion etc in other places.
 	 */
-	generateTypeDefs()
-	{
+	generateTypeDefs() {
 		let template = this.getTemplate('typedef');
 
 		template = template
@@ -203,8 +205,7 @@ class WebpackStoreLoader {
 	 * This will autoload our store files and define the global vue app
 	 * instances of our stores.
 	 */
-	generatePlugin()
-	{
+	generatePlugin() {
 		let template    = this.getTemplate('plugin');
 		let defTemplate = this.getTemplate('vuestore-definition');
 
@@ -222,8 +223,7 @@ class WebpackStoreLoader {
 		fs.writeFileSync(this.vueStorePluginFilePath, template);
 	}
 
-	getTemplate(name)
-	{
+	getTemplate(name) {
 		return fs.readFileSync(
 			path.resolve(process.cwd(), 'template', `vue${this.vueVersion}`, `${name}.template.txt`),
 			{encoding : 'utf-8'},
@@ -232,12 +232,10 @@ class WebpackStoreLoader {
 
 	/**
 	 * @param currentDirPath
-	 * @param callback
 	 * @param isSubDir
 	 * @returns {{filePath:string, stat:Stats | BigIntStats | undefined, isSubDir:boolean}[]}
 	 */
-	walkDirectory(currentDirPath, callback, isSubDir = false)
-	{
+	walkDirectory(currentDirPath: string, isSubDir = false) {
 		const files = [];
 
 		fs.readdirSync(currentDirPath).forEach((name) => {
@@ -251,7 +249,7 @@ class WebpackStoreLoader {
 
 				files.push({filePath, stat, isSubDir});
 			} else if (stat.isDirectory()) {
-				files.push(...this.walkDirectory(filePath, callback, true));
+				files.push(...this.walkDirectory(filePath, true));
 			}
 		});
 
@@ -264,8 +262,7 @@ class WebpackStoreLoader {
 	 *
 	 * @param pathToPrepare
 	 */
-	preparePath(pathToPrepare)
-	{
+	preparePath(pathToPrepare) {
 		const pathParts = pathToPrepare.split('/');
 		let pathBuilt   = pathParts[0];
 
@@ -277,7 +274,7 @@ class WebpackStoreLoader {
 
 			const pathCheck = path.join(pathBuilt, pathPart);
 
-//			console.log('PathCheck: ', pathCheck);
+			//			console.log('PathCheck: ', pathCheck);
 
 			if (!fs.existsSync(pathCheck)) {
 				fs.mkdirSync(pathCheck);
@@ -287,15 +284,13 @@ class WebpackStoreLoader {
 		}
 	}
 
-	camelize(str)
-	{
+	camelize(str) {
 		return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
 			return index === 0 ? word.toLowerCase() : word.toUpperCase();
 		}).replace(/\s+/g, '');
 	}
 
-	getVueVersion()
-	{
+	getVueVersion() {
 		const deps = {...packageJson.dependencies, ...packageJson.devDependencies};
 
 		if (!deps?.vue) {
@@ -313,4 +308,3 @@ class WebpackStoreLoader {
 	}
 }
 
-module.exports = WebpackStoreLoader;

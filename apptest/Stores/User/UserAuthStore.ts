@@ -1,4 +1,4 @@
-import {Store} from "../../../src/Store";
+import {Store} from "../../../package";
 
 type UserAuthStoreState = {
 	user: object;
@@ -17,6 +17,7 @@ export class UserAuthStore extends Store<UserAuthStoreState> {
 	get message() {
 		return this.state.message;
 	}
+
 	set message(value) {
 		this.state.message = value;
 	}

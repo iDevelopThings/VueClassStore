@@ -3,7 +3,7 @@
     "outDir": "./package/",
     "sourceMap": true,
     "strict": false,
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "target": "es5",
     "skipLibCheck": true,
@@ -20,5 +20,11 @@
   },
   "include": [
     "./src/**/*"
+  ],
+  "exclude": [
+    "./apptest/**/*",
+    "./dist/**/*",
+    "./package/**/*",
+    "./node_modules/**/*",
   ]
 }

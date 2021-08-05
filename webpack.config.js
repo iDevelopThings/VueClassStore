@@ -1,11 +1,12 @@
-const path               = require('path');
-const webpack            = require('webpack');
-const {VueLoaderPlugin}  = require('vue-loader');
-const WebpackStoreLoader = require('./WebpackStoreLoader.js');
-module.exports           = {
+const path                 = require('path');
+const webpack              = require('webpack');
+const {VueLoaderPlugin}    = require('vue-loader');
+const {WebpackStoreLoader} = require('./package/WebpackPlugin.js');
+
+module.exports = {
 	entry       : {
-		app     : './apptest/index.ts',
-		package : './src/index.ts',
+		app : './apptest/index.ts',
+//		package : './src/index.ts',
 	},
 	output      : {
 		path       : path.resolve(__dirname, './dist'),
@@ -15,8 +16,9 @@ module.exports           = {
 	module      : {
 		rules : [
 			{
-				test   : /\.vue$/,
-				loader : 'vue-loader',
+				test    : /\.vue$/,
+				loader  : 'vue-loader',
+				exclude : /node_modules|src|package/,
 			},
 			{
 				test : /\.css$/,
@@ -28,7 +30,8 @@ module.exports           = {
 			{
 				test    : /\.tsx?$/,
 				loader  : 'ts-loader',
-				exclude : /node_modules/,
+				exclude : /node_modules|src/,
+
 				options : {
 					appendTsSuffixTo : [/\.vue$/, /\.ts$/],
 				},
