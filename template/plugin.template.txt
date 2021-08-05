@@ -1,0 +1,7 @@
+{{imports}}
+
+export default {
+	install : (Vue, options) => {
+{{definitions}}
+	}
+};
