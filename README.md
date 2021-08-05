@@ -22,8 +22,8 @@ entirely different class/location.
 
 **Install the package**
 ```shell
-npm install VueClassStore
-yarn add VueClassStore
+npm install vue-class-stores
+yarn add vue-class-stores
 ```
 
 **Add to your webpack configuration:**
@@ -67,7 +67,7 @@ const app = new Vue({el : "#app"});
 If you're using typescript, you can create a type for your store object and provide this as a generic to Store
 
 ```ts 
-import {Store} from "VueClassStore";
+import {Store} from "vue-class-stores";
 
 type UserStoreState = {
 	user: object;
@@ -85,7 +85,7 @@ export class UserStore extends Store<UserStoreState> {
 You can use initialState() function. This provides the base state for your store, you can see this like vues data() object on a vuejs single file component.
 
 ```ts
-import {Store} from "VueClassStore";
+import {Store} from "vue-class-stores";
 
 type UserStoreState = {
 	user: object;
@@ -109,7 +109,7 @@ export class UserStore extends Store<UserStoreState> {
 You can also do it this way
 
 ```ts
-import {Store} from "VueClassStore";
+import {Store} from "vue-class-stores";
 
 type UserStoreState = {
 	user: object;
@@ -131,7 +131,7 @@ export class UserStore extends Store<UserStoreState> {
 **Example Store**:
 
 ```ts
-import {Store} from "VueClassStore";
+import {Store} from "vue-class-stores";
 
 type UserStoreState = {
 	message: string;
