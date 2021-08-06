@@ -1,6 +1,6 @@
 {{imports}}
 
-export default {
+export const VueClassStoresPlugin = {
 	install : (app, options) => {
 {{definitions}}
 	}

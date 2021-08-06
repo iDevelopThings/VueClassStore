@@ -95,7 +95,7 @@ var Configuration = /** @class */ (function () {
         var fileNames = {
             stores: 'VueStores',
             definitions: 'VueStoresTypeDefinitions.d.ts',
-            plugin: 'VueStorePlugin',
+            plugin: 'VueClassStoresPlugin',
         };
         if (absolutePath) {
             fileNames.stores = path_1.default.join(this.pluginDirectory, fileNames.stores);
