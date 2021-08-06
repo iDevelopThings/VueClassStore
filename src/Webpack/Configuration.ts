@@ -105,7 +105,7 @@ export class Configuration {
 		const fileNames = {
 			stores      : 'VueStores',
 			definitions : 'VueStoresTypeDefinitions.d.ts',
-			plugin      : 'VueStorePlugin',
+			plugin      : 'VueClassStoresPlugin',
 		};
 
 		if (absolutePath) {

@@ -81,7 +81,7 @@ npm run-script generate-class-stores
 
 Now if you navigate to /src/Stores/ you will see a **Plugin** directory. These are the files that this package has built for you.
 
-**VueStorePlugin** - This is an auto generated plugin for initiating your stores and registering them with Vue.
+**VueClassStoresPlugin** - This is an auto generated plugin for initiating your stores and registering them with Vue.
 
 **VueStores** - This is an export of all your stores that will maintain state, it will allow you to use your stores in different classes and such.
 
@@ -91,9 +91,9 @@ registered with Vue.
 **You can now add the plugin to your vue app**
 
 ```ts
-import VueStorePlugin from "./Stores/Plugin/VueStorePlugin";
+import {VueClassStoresPlugin} from "./Stores/Plugin/VueStorePlugin";
 
-Vue.use(VueStorePlugin);
+Vue.use(VueClassStoresPlugin);
 
 const app = new Vue({el : "#app"});
 ```
