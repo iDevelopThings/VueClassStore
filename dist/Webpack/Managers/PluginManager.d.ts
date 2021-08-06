@@ -3,4 +3,5 @@ export declare class PluginManager {
     static vuePluginStoreImports: string;
     static generatePluginStoreImports(): void;
     static generatePlugin(): void;
+    static clearFiles(): void;
 }

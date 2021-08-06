@@ -1,6 +1,8 @@
 import path from "path";
 import {VueVersionManager} from "./Managers/VueVersionManager";
 
+const packageJson = require(path.resolve(process.cwd(), 'package.json'));
+
 export type PluginConfiguration = {
 	usingTypescript?: boolean;
 	pluginDirectory?: string;
@@ -13,6 +15,7 @@ export type ConfigurationManagerConfiguration = {
 	pluginDirectory: string;
 	storesDirectory: string;
 	storesPath?: string;
+	pluginPath?: string;
 	shortVueDeclaration: boolean;
 	versionManager: VueVersionManager,
 	vueVersion: 2 | 3;
@@ -28,6 +31,7 @@ export class Configuration {
 	public static pluginDirectory: string;
 	public static storesDirectory: string;
 	public static storesPath?: string;
+	public static pluginPath?: string;
 	public static shortVueDeclaration: boolean;
 	public static versionManager: VueVersionManager;
 	public static vueVersion: 2 | 3;
@@ -36,7 +40,7 @@ export class Configuration {
 	public static definitionsFilePath?: string;
 	public static vueStorePluginFilePath?: string;
 
-	public static setConfiguration(configuration: PluginConfiguration) {
+	public static setConfiguration(configuration?: PluginConfiguration) {
 
 		this.usingTypescript     = false;
 		this.pluginDirectory     = 'src/Stores/Plugin';
@@ -45,6 +49,13 @@ export class Configuration {
 		this.versionManager      = new VueVersionManager();
 		this.vueVersion          = VueVersionManager.get().getVersion();
 		this.fileExtension       = '.js';
+
+		if (configuration === undefined) {
+			const packageJsonConfig = packageJson["vue-class-stores"];
+			if (packageJsonConfig !== undefined) {
+				configuration = packageJsonConfig;
+			}
+		}
 
 		this.setupConfiguration(configuration);
 	}
@@ -55,6 +66,7 @@ export class Configuration {
 	}
 
 	private static setupConfiguration(configuration: PluginConfiguration) {
+
 		// Set the main configurations that were passed to the plugin
 		for (let key of Object.keys(configuration)) {
 
@@ -71,6 +83,7 @@ export class Configuration {
 		// Lets now configure any additional configs
 		this.fileExtension = configuration.usingTypescript ? '.ts' : '.js';
 		this.storesPath    = path.resolve(...this.storesDirectory.split('/'));
+		this.pluginPath    = path.resolve(...this.pluginDirectory.split('/'));
 
 		this.storesFilePath = path.resolve(
 			...this.pluginDirectory.split('/'),

@@ -10,6 +10,7 @@ export declare type ConfigurationManagerConfiguration = {
     pluginDirectory: string;
     storesDirectory: string;
     storesPath?: string;
+    pluginPath?: string;
     shortVueDeclaration: boolean;
     versionManager: VueVersionManager;
     vueVersion: 2 | 3;
@@ -23,6 +24,7 @@ export declare class Configuration {
     static pluginDirectory: string;
     static storesDirectory: string;
     static storesPath?: string;
+    static pluginPath?: string;
     static shortVueDeclaration: boolean;
     static versionManager: VueVersionManager;
     static vueVersion: 2 | 3;
@@ -30,7 +32,7 @@ export declare class Configuration {
     static storesFilePath?: string;
     static definitionsFilePath?: string;
     static vueStorePluginFilePath?: string;
-    static setConfiguration(configuration: PluginConfiguration): void;
+    static setConfiguration(configuration?: PluginConfiguration): void;
     static set(key: keyof ConfigurationManagerConfiguration, value: any): void;
     private static setupConfiguration;
     static fileNames(withExtensions?: boolean, absolutePath?: boolean): {

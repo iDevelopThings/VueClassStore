@@ -35,9 +35,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTemplate = exports.camelize = exports.ensureDirectoryExists = exports.walkDirectory = void 0;
+exports.getTemplate = exports.camelize = exports.ensureDirectoryExists = exports.writeFile = exports.walkDirectory = void 0;
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
+var Configuration_1 = require("./Configuration");
 /**
  * @param {string} directory
  * @param {boolean} isSubDir
@@ -61,6 +62,11 @@ var walkDirectory = function (directory, isSubDir) {
     return files;
 };
 exports.walkDirectory = walkDirectory;
+var writeFile = function (path, content) {
+    exports.ensureDirectoryExists(path);
+    fs_1.default.writeFileSync(path, content);
+};
+exports.writeFile = writeFile;
 /**
  * Ensure that all of our directories exist...
  * if they don't, we'll create them
@@ -77,8 +83,17 @@ var ensureDirectoryExists = function (pathToPrepare) {
             if (pathBuilt.includes(pathPart)) {
                 continue;
             }
+            if (pathPart.endsWith(Configuration_1.Configuration.fileExtension)) {
+                continue;
+            }
             var pathCheck = path_1.default.join(pathBuilt, pathPart);
-            //			console.log('PathCheck: ', pathCheck);
+            if (!pathCheck.endsWith('/')) {
+                pathCheck += '/';
+            }
+            if (!pathCheck.startsWith('/')) {
+                pathCheck = '/' + pathCheck;
+            }
+            pathCheck = path_1.default.resolve(pathCheck);
             if (!fs_1.default.existsSync(pathCheck)) {
                 fs_1.default.mkdirSync(pathCheck);
             }

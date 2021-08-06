@@ -1,36 +1,35 @@
 import * as path from "path";
 import {Compiler, Stats, WebpackError} from 'webpack';
 import {Configuration, PluginConfiguration} from "./Configuration";
-//import {IgnoringWatchFileSystem} from "./IgnorePlugin";
 import {PluginManager} from "./Managers/PluginManager";
 import {StoreManager} from "./Managers/StoreManager";
 
-
 export class VueClassStoresLoader {
+	private configuration: PluginConfiguration;
 
-	constructor(configuration: PluginConfiguration) {
+	constructor(configuration?: PluginConfiguration) {
+		this.configuration = configuration;
+
 		Configuration.setConfiguration(configuration);
-
-		StoreManager.loadStores();
 	}
 
 	apply(compiler: Compiler) {
 
 		/*compiler.watchFileSystem = new IgnoringWatchFileSystem(
-			compiler.watchFileSystem,
-			[
-				...Object.values(Configuration.fileNames(true, true)),
-				'dist/Webpack/!**!/!*'
-			]
-		);*/
+		 compiler.watchFileSystem,
+		 [
+		 ...Object.values(Configuration.fileNames(true, true)),
+		 'dist/Webpack/!**!/!*'
+		 ]
+		 );*/
 
 		compiler.hooks.done.tap('VueClassStoreLoader', (stats: Stats) => {
-			if(compiler.modifiedFiles) {
-				const files = Object.values(Configuration.fileNames(true, true))
+			if (compiler.modifiedFiles) {
+				const files    = Object.values(Configuration.fileNames(true, true));
 				const modified = [...compiler.modifiedFiles.values()];
 
 				for (let file of files) {
-					if(modified.includes(path.resolve(file))){
+					if (modified.includes(path.resolve(file))) {
 						return;
 					}
 				}
@@ -40,19 +39,29 @@ export class VueClassStoresLoader {
 				return;
 			}
 
-			if (Configuration.versionManager.isInvalidVersion()) {
-				stats.compilation.warnings.push(
-					new WebpackError('VUE VERSION IS NOT 2 OR 3. CANNOT USE VUE CLASS STORE PLUGIN.')
-				);
-				return;
-			}
-
-			this.runPlugin();
-
+			VueClassStoresLoader.generate(stats, this.configuration);
 		});
 	}
 
-	runPlugin() {
+	public static generate(stats?: Stats, configuration?: PluginConfiguration) {
+		Configuration.setConfiguration(configuration);
+
+		StoreManager.loadStores();
+
+		if (Configuration.versionManager.isInvalidVersion()) {
+			const ERROR = 'VUE VERSION IS NOT 2 OR 3. CANNOT USE VUE CLASS STORE PLUGIN.';
+
+			if (stats) {
+				stats.compilation.warnings.push(new WebpackError(ERROR));
+
+				return;
+			}
+
+			throw new Error(ERROR);
+		}
+
+		PluginManager.clearFiles();
+
 		PluginManager.generatePluginStoreImports();
 
 		StoreManager.generateStoreExportsFile();
@@ -61,17 +70,5 @@ export class VueClassStoresLoader {
 
 		PluginManager.generatePlugin();
 	}
+
 }
-
-//export default function (...args) {
-//	this.cacheable(false);
-//
-//	const callback = this.async();
-//
-//	//	this.addDependency(headerPath);
-//
-//	console.log(...args);
-//
-//	callback(null, args[0]);
-//}
-

@@ -1,7 +1,8 @@
-import { Compiler } from 'webpack';
+import { Compiler, Stats } from 'webpack';
 import { PluginConfiguration } from "./Configuration";
 export declare class VueClassStoresLoader {
-    constructor(configuration: PluginConfiguration);
+    private configuration;
+    constructor(configuration?: PluginConfiguration);
     apply(compiler: Compiler): void;
-    runPlugin(): void;
+    static generate(stats?: Stats, configuration?: PluginConfiguration): void;
 }

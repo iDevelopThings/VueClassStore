@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Configuration = void 0;
 var path_1 = __importDefault(require("path"));
 var VueVersionManager_1 = require("./Managers/VueVersionManager");
+var packageJson = require(path_1.default.resolve(process.cwd(), 'package.json'));
 var Configuration = /** @class */ (function () {
     function Configuration() {
     }
@@ -49,6 +50,12 @@ var Configuration = /** @class */ (function () {
         this.versionManager = new VueVersionManager_1.VueVersionManager();
         this.vueVersion = VueVersionManager_1.VueVersionManager.get().getVersion();
         this.fileExtension = '.js';
+        if (configuration === undefined) {
+            var packageJsonConfig = packageJson["vue-class-stores"];
+            if (packageJsonConfig !== undefined) {
+                configuration = packageJsonConfig;
+            }
+        }
         this.setupConfiguration(configuration);
     };
     Configuration.set = function (key, value) {
@@ -77,6 +84,7 @@ var Configuration = /** @class */ (function () {
         // Lets now configure any additional configs
         this.fileExtension = configuration.usingTypescript ? '.ts' : '.js';
         this.storesPath = path_1.default.resolve.apply(path_1.default, __spreadArray([], __read(this.storesDirectory.split('/'))));
+        this.pluginPath = path_1.default.resolve.apply(path_1.default, __spreadArray([], __read(this.pluginDirectory.split('/'))));
         this.storesFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).stores]));
         this.definitionsFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).definitions]));
         this.vueStorePluginFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).plugin]));

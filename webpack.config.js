@@ -52,12 +52,7 @@ module.exports = {
 	},
 	plugins     : [
 		new VueLoaderPlugin(),
-		new VueClassStoresLoader({
-			usingTypescript     : true,
-			shortVueDeclaration : true,
-			pluginDirectory     : 'apptest/Stores/Plugin',
-			storesDirectory     : 'apptest/Stores',
-		}),
+		new VueClassStoresLoader(),
 //		new VueClassStoresPlugin({
 //			usingTypescript     : true,
 //			shortVueDeclaration : true,

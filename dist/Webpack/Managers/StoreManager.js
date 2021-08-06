@@ -10,12 +10,8 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoreManager = void 0;
-var fs_1 = __importDefault(require("fs"));
 var Configuration_1 = require("../Configuration");
 var PluginManager_1 = require("./PluginManager");
 var Utilities_1 = require("../Utilities");
@@ -25,6 +21,7 @@ var StoreManager = /** @class */ (function () {
     StoreManager.loadStores = function () {
         var e_1, _a;
         Utilities_1.ensureDirectoryExists(Configuration_1.Configuration.storesPath);
+        Utilities_1.ensureDirectoryExists(Configuration_1.Configuration.pluginPath);
         var files = Utilities_1.walkDirectory(Configuration_1.Configuration.storesPath);
         try {
             for (var files_1 = __values(files), files_1_1 = files_1.next(); !files_1_1.done; files_1_1 = files_1.next()) {
@@ -65,14 +62,14 @@ var StoreManager = /** @class */ (function () {
         this.storeExports += this.stores.map(function (store) { return exportsTemplate
             .replaceAll('{{name}}', store.name)
             .replaceAll('{{camelName}}', store.camelName); }).join("\n");
-        fs_1.default.writeFileSync(Configuration_1.Configuration.storesFilePath, this.storeExports);
+        Utilities_1.writeFile(Configuration_1.Configuration.storesFilePath, this.storeExports);
     };
     StoreManager.generateTypeDefs = function () {
         var template = Utilities_1.getTemplate('typedef', Configuration_1.Configuration.vueVersion);
         template = template
             .replaceAll('{{imports}}', PluginManager_1.PluginManager.pluginStoreImports)
             .replaceAll('{{definitions}}', this.stores.map(function (m) { return "\t\t$" + m.globalName + " : " + m.name; }).join(",\n"));
-        fs_1.default.writeFileSync(Configuration_1.Configuration.definitionsFilePath, template);
+        Utilities_1.writeFile(Configuration_1.Configuration.definitionsFilePath, template);
     };
     StoreManager.stores = [];
     StoreManager.storeExports = null;

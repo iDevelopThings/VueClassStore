@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import {Configuration} from "./Configuration";
 
 export type WalkDirectoryFile = {
 	filePath: string,
@@ -31,6 +32,12 @@ export const walkDirectory = (directory: string, isSubDir = false): WalkDirector
 	return files;
 };
 
+export const writeFile = (path: string, content: string) => {
+	ensureDirectoryExists(path);
+
+	fs.writeFileSync(path, content);
+};
+
 /**
  * Ensure that all of our directories exist...
  * if they don't, we'll create them
@@ -46,10 +53,20 @@ export const ensureDirectoryExists = (pathToPrepare: string) => {
 		if (pathBuilt.includes(pathPart)) {
 			continue;
 		}
+		if (pathPart.endsWith(Configuration.fileExtension)) {
+			continue;
+		}
 
-		const pathCheck = path.join(pathBuilt, pathPart);
+		let pathCheck = path.join(pathBuilt, pathPart);
 
-		//			console.log('PathCheck: ', pathCheck);
+		if (!pathCheck.endsWith('/')) {
+			pathCheck += '/';
+		}
+		if (!pathCheck.startsWith('/')) {
+			pathCheck = '/' + pathCheck;
+		}
+
+		pathCheck = path.resolve(pathCheck);
 
 		if (!fs.existsSync(pathCheck)) {
 			fs.mkdirSync(pathCheck);

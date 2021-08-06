@@ -57,40 +57,19 @@ var PluginManager = /** @class */ (function () {
         template = template
             .replaceAll('{{imports}}', imports)
             .replaceAll('{{definitions}}', definitions);
-        fs_1.default.writeFileSync(Configuration_1.Configuration.vueStorePluginFilePath, template);
+        Utilities_1.writeFile(Configuration_1.Configuration.vueStorePluginFilePath, template);
+    };
+    PluginManager.clearFiles = function () {
+        Object.values(Configuration_1.Configuration.fileNames(true)).forEach(function (name) {
+            var filePath = path.join.apply(path, __spreadArray(__spreadArray([], __read(Configuration_1.Configuration.pluginDirectory.split('/'))), [name]));
+            if (fs_1.default.existsSync(filePath)) {
+                fs_1.default.rmSync(filePath);
+            }
+        });
     };
     PluginManager.pluginStoreImports = null;
     PluginManager.vuePluginStoreImports = null;
     return PluginManager;
 }());
 exports.PluginManager = PluginManager;
-//export class StoreManager {
-//	public static stores: StoreModule[] = [];
-//
-//	public static loadStores() {
-//		ensureDirectoryExists(Configuration.storesPath);
-//
-//		const files = walkDirectory(Configuration.storesPath);
-//
-//		for (let {filePath, isSubDir} of files) {
-//			const fileName       = filePath.split('/').pop();
-//			const name           = fileName.split('.').shift();
-//			const shortName      = fileName.split('.').shift().replace('Store', '');
-//			const camelName      = camelize(name);
-//			const shortCamelName = camelize(name).replace('Store', '');
-//
-//			this.stores.push({
-//				fileName,
-//				name,
-//				camelName,
-//				absolutePath : filePath,
-//				relativePath : filePath.replace(Configuration.storesPath + '/', '').split('.')[0],
-//				isInSubDir   : isSubDir,
-//				shortName,
-//				shortCamelName,
-//				globalName   : Configuration.shortVueDeclaration ? shortCamelName : camelName,
-//			});
-//		}
-//	}
-//}
 //# sourceMappingURL=PluginManager.js.map

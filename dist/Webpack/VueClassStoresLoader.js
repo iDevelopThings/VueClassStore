@@ -55,22 +55,21 @@ exports.VueClassStoresLoader = void 0;
 var path = __importStar(require("path"));
 var webpack_1 = require("webpack");
 var Configuration_1 = require("./Configuration");
-//import {IgnoringWatchFileSystem} from "./IgnorePlugin";
 var PluginManager_1 = require("./Managers/PluginManager");
 var StoreManager_1 = require("./Managers/StoreManager");
 var VueClassStoresLoader = /** @class */ (function () {
     function VueClassStoresLoader(configuration) {
+        this.configuration = configuration;
         Configuration_1.Configuration.setConfiguration(configuration);
-        StoreManager_1.StoreManager.loadStores();
     }
     VueClassStoresLoader.prototype.apply = function (compiler) {
         /*compiler.watchFileSystem = new IgnoringWatchFileSystem(
-            compiler.watchFileSystem,
-            [
-                ...Object.values(Configuration.fileNames(true, true)),
-                'dist/Webpack/!**!/!*'
-            ]
-        );*/
+         compiler.watchFileSystem,
+         [
+         ...Object.values(Configuration.fileNames(true, true)),
+         'dist/Webpack/!**!/!*'
+         ]
+         );*/
         var _this = this;
         compiler.hooks.done.tap('VueClassStoreLoader', function (stats) {
             var e_1, _a;
@@ -96,14 +95,21 @@ var VueClassStoresLoader = /** @class */ (function () {
             if (stats.hasErrors()) {
                 return;
             }
-            if (Configuration_1.Configuration.versionManager.isInvalidVersion()) {
-                stats.compilation.warnings.push(new webpack_1.WebpackError('VUE VERSION IS NOT 2 OR 3. CANNOT USE VUE CLASS STORE PLUGIN.'));
-                return;
-            }
-            _this.runPlugin();
+            VueClassStoresLoader.generate(stats, _this.configuration);
         });
     };
-    VueClassStoresLoader.prototype.runPlugin = function () {
+    VueClassStoresLoader.generate = function (stats, configuration) {
+        Configuration_1.Configuration.setConfiguration(configuration);
+        StoreManager_1.StoreManager.loadStores();
+        if (Configuration_1.Configuration.versionManager.isInvalidVersion()) {
+            var ERROR = 'VUE VERSION IS NOT 2 OR 3. CANNOT USE VUE CLASS STORE PLUGIN.';
+            if (stats) {
+                stats.compilation.warnings.push(new webpack_1.WebpackError(ERROR));
+                return;
+            }
+            throw new Error(ERROR);
+        }
+        PluginManager_1.PluginManager.clearFiles();
         PluginManager_1.PluginManager.generatePluginStoreImports();
         StoreManager_1.StoreManager.generateStoreExportsFile();
         StoreManager_1.StoreManager.generateTypeDefs();
@@ -112,15 +118,4 @@ var VueClassStoresLoader = /** @class */ (function () {
     return VueClassStoresLoader;
 }());
 exports.VueClassStoresLoader = VueClassStoresLoader;
-//export default function (...args) {
-//	this.cacheable(false);
-//
-//	const callback = this.async();
-//
-//	//	this.addDependency(headerPath);
-//
-//	console.log(...args);
-//
-//	callback(null, args[0]);
-//}
 //# sourceMappingURL=VueClassStoresLoader.js.map

@@ -2,7 +2,7 @@ const path = require('path');
 import fs from "fs";
 import {Configuration} from "../Configuration";
 import {StoreManager} from "./StoreManager";
-import {getTemplate} from "../Utilities";
+import {getTemplate, writeFile} from "../Utilities";
 
 
 export class PluginManager {
@@ -47,37 +47,17 @@ export class PluginManager {
 			.replaceAll('{{imports}}', imports)
 			.replaceAll('{{definitions}}', definitions);
 
-		fs.writeFileSync(Configuration.vueStorePluginFilePath, template);
+		writeFile(Configuration.vueStorePluginFilePath, template);
+	}
+
+	public static clearFiles() {
+		Object.values(Configuration.fileNames(true)).forEach(name => {
+			const filePath = path.join(...Configuration.pluginDirectory.split('/'), name);
+
+			if (fs.existsSync(filePath)) {
+				fs.rmSync(filePath);
+			}
+		});
 	}
 
 }
-
-//export class StoreManager {
-//	public static stores: StoreModule[] = [];
-//
-//	public static loadStores() {
-//		ensureDirectoryExists(Configuration.storesPath);
-//
-//		const files = walkDirectory(Configuration.storesPath);
-//
-//		for (let {filePath, isSubDir} of files) {
-//			const fileName       = filePath.split('/').pop();
-//			const name           = fileName.split('.').shift();
-//			const shortName      = fileName.split('.').shift().replace('Store', '');
-//			const camelName      = camelize(name);
-//			const shortCamelName = camelize(name).replace('Store', '');
-//
-//			this.stores.push({
-//				fileName,
-//				name,
-//				camelName,
-//				absolutePath : filePath,
-//				relativePath : filePath.replace(Configuration.storesPath + '/', '').split('.')[0],
-//				isInSubDir   : isSubDir,
-//				shortName,
-//				shortCamelName,
-//				globalName   : Configuration.shortVueDeclaration ? shortCamelName : camelName,
-//			});
-//		}
-//	}
-//}

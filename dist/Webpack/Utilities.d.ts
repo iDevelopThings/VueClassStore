@@ -7,6 +7,7 @@ export declare type WalkDirectoryFile = {
  * @param {boolean} isSubDir
  */
 export declare const walkDirectory: (directory: string, isSubDir?: boolean) => WalkDirectoryFile[];
+export declare const writeFile: (path: string, content: string) => void;
 /**
  * Ensure that all of our directories exist...
  * if they don't, we'll create them

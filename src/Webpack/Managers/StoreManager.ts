@@ -1,7 +1,7 @@
 import fs from "fs";
 import {Configuration} from "../Configuration";
 import {PluginManager} from "./PluginManager";
-import {camelize, ensureDirectoryExists, getTemplate, walkDirectory} from "../Utilities";
+import {camelize, ensureDirectoryExists, getTemplate, walkDirectory, writeFile} from "../Utilities";
 
 export type StoreModule = {
 	fileName: string | undefined,
@@ -21,6 +21,7 @@ export class StoreManager {
 
 	public static loadStores() {
 		ensureDirectoryExists(Configuration.storesPath);
+		ensureDirectoryExists(Configuration.pluginPath);
 
 		const files = walkDirectory(Configuration.storesPath);
 
@@ -61,7 +62,7 @@ export class StoreManager {
 			.replaceAll('{{camelName}}', store.camelName),
 		).join("\n");
 
-		fs.writeFileSync(Configuration.storesFilePath, this.storeExports);
+		writeFile(Configuration.storesFilePath, this.storeExports);
 	}
 
 	public static generateTypeDefs() {
@@ -73,6 +74,6 @@ export class StoreManager {
 				this.stores.map(m => `\t\t$${m.globalName} : ${m.name}`).join(",\n"),
 			);
 
-		fs.writeFileSync(Configuration.definitionsFilePath, template);
+		writeFile(Configuration.definitionsFilePath, template);
 	}
 }
