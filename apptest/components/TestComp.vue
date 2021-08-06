@@ -1,9 +1,10 @@
 <template>
 	<div>
-		<p>$userStore.message : {{$userStore.message}}</p>
-		<p>$userAuthStore.message : {{$userAuthStore.message}}</p>
+		<p>$user.message : {{$user.message}}</p>
+		<p>$userAuth.message : {{$userAuth.message}}</p>
+		<p>$anotherUserAuth.message : {{$anotherUserAuth.message}}</p>
 
-		<button @click="$userStore.setMessage()">set</button>
+		<button @click="$user.setMessage()">set</button>
 	</div>
 </template>
 

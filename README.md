@@ -30,13 +30,12 @@ yarn add vue-class-stores
 **Add to your webpack configuration:**
 
 ```js
-
-const {WebpackStoreLoader} = require('vue-class-stores');
+const {VueClassStoresLoader} = require('./dist/Webpack');
 
 //....
 
 plugins : [
-	new VueClassStoresPlugin({
+	new VueClassStoresLoader({
 		// true = Using typescript
 		// false = Using javascript
 		// Ensure you set this correctly!  

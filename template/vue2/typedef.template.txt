@@ -1,5 +1,11 @@
 {{imports}}
 
+// Add this shim here due to conflict with vue2
+declare module "*.vue" {
+    import Vue from "vue";
+    export default Vue;
+}
+
 export declare module "vue/types/vue" {
 	interface Vue {
 {{definitions}}

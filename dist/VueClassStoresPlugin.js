@@ -10,10 +10,37 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
         to[j] = from[i];
     return to;
+};
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VueClassStoresPlugin = void 0;
@@ -50,7 +77,7 @@ var VueClassStoresPlugin = /** @class */ (function () {
         }
         this.vueVersion = this.getVueVersion();
         this.fileExtension = this.usingTypescript ? '.ts' : '.js';
-        this.storesPath = path.resolve.apply(path, this.storesDirectory.split('/'));
+        this.storesPath = path.resolve.apply(path, __spreadArray([], __read(this.storesDirectory.split('/'))));
         this.fullFileNames = {
             stores: 'VueStores' + this.fileExtension,
             definitions: 'VueStoresTypeDefinitions.d.ts',
@@ -61,9 +88,9 @@ var VueClassStoresPlugin = /** @class */ (function () {
             definitions: 'VueStoresTypeDefinitions',
             plugin: 'VueStorePlugin',
         };
-        this.storesFilePath = path.resolve.apply(path, __spreadArray(__spreadArray([], this.pluginDirectory.split('/')), [this.fullFileNames.stores]));
-        this.definitionsFilePath = path.resolve.apply(path, __spreadArray(__spreadArray([], this.pluginDirectory.split('/')), [this.fullFileNames.definitions]));
-        this.vueStorePluginFilePath = path.resolve.apply(path, __spreadArray(__spreadArray([], this.pluginDirectory.split('/')), [this.fullFileNames.plugin]));
+        this.storesFilePath = path.resolve.apply(path, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fullFileNames.stores]));
+        this.definitionsFilePath = path.resolve.apply(path, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fullFileNames.definitions]));
+        this.vueStorePluginFilePath = path.resolve.apply(path, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fullFileNames.plugin]));
     }
     VueClassStoresPlugin.prototype.apply = function (compiler) {
         var _this = this;
@@ -83,34 +110,44 @@ var VueClassStoresPlugin = /** @class */ (function () {
         });
     };
     VueClassStoresPlugin.prototype.prepare = function () {
+        var e_1, _a;
         this.preparePath(this.pluginDirectory);
         this.preparePath(this.storesDirectory);
         //this.cleanFiles();
         var files = this.walkDirectory(this.storesPath);
-        for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
-            var _a = files_1[_i], filePath = _a.filePath, stat = _a.stat, isSubDir = _a.isSubDir;
-            var fileName = filePath.split('/').pop();
-            var name_1 = fileName.split('.').shift();
-            var shortName = fileName.split('.').shift().replace('Store', '');
-            var camelName = this.camelize(name_1);
-            var shortCamelName = this.camelize(name_1).replace('Store', '');
-            this.stores.push({
-                fileName: fileName,
-                name: name_1,
-                camelName: camelName,
-                absolutePath: filePath,
-                relativePath: filePath.replace(this.storesPath + '/', '').split('.')[0],
-                isInSubDir: isSubDir,
-                shortName: shortName,
-                shortCamelName: shortCamelName,
-                globalName: this.shortVueDeclaration ? shortCamelName : camelName,
-            });
+        try {
+            for (var files_1 = __values(files), files_1_1 = files_1.next(); !files_1_1.done; files_1_1 = files_1.next()) {
+                var _b = files_1_1.value, filePath = _b.filePath, stat = _b.stat, isSubDir = _b.isSubDir;
+                var fileName = filePath.split('/').pop();
+                var name_1 = fileName.split('.').shift();
+                var shortName = fileName.split('.').shift().replace('Store', '');
+                var camelName = this.camelize(name_1);
+                var shortCamelName = this.camelize(name_1).replace('Store', '');
+                this.stores.push({
+                    fileName: fileName,
+                    name: name_1,
+                    camelName: camelName,
+                    absolutePath: filePath,
+                    relativePath: filePath.replace(this.storesPath + '/', '').split('.')[0],
+                    isInSubDir: isSubDir,
+                    shortName: shortName,
+                    shortCamelName: shortCamelName,
+                    globalName: this.shortVueDeclaration ? shortCamelName : camelName,
+                });
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (files_1_1 && !files_1_1.done && (_a = files_1.return)) _a.call(files_1);
+            }
+            finally { if (e_1) throw e_1.error; }
         }
     };
     VueClassStoresPlugin.prototype.cleanFiles = function () {
         var _this = this;
         Object.values(this.fullFileNames).forEach(function (name) {
-            var filePath = path.join.apply(path, __spreadArray(__spreadArray([], _this.pluginDirectory.split('/')), [name]));
+            var filePath = path.join.apply(path, __spreadArray(__spreadArray([], __read(_this.pluginDirectory.split('/'))), [name]));
             if (fs.existsSync(filePath)) {
                 fs.rmSync(filePath);
             }
@@ -129,7 +166,7 @@ var VueClassStoresPlugin = /** @class */ (function () {
             .join("\n");
         var fileNamesImport = this.stores.map(function (m) { return m.camelName; });
         if (this.vueVersion === 3) {
-            fileNamesImport.push.apply(fileNamesImport, this.stores.map(function (m) { return m.name + 'Symbol'; }));
+            fileNamesImport.push.apply(fileNamesImport, __spreadArray([], __read(this.stores.map(function (m) { return m.name + 'Symbol'; }))));
         }
         this.vuePluginStoreImports = "import {" + fileNamesImport.join(', ') + "} from \"./" + this.fileNames.stores + "\"; \n";
     };
@@ -209,7 +246,7 @@ var VueClassStoresPlugin = /** @class */ (function () {
                 files.push({ filePath: filePath, stat: stat, isSubDir: isSubDir });
             }
             else if (stat.isDirectory()) {
-                files.push.apply(files, _this.walkDirectory(filePath, true));
+                files.push.apply(files, __spreadArray([], __read(_this.walkDirectory(filePath, true))));
             }
         });
         return files;
@@ -221,19 +258,29 @@ var VueClassStoresPlugin = /** @class */ (function () {
      * @param pathToPrepare
      */
     VueClassStoresPlugin.prototype.preparePath = function (pathToPrepare) {
+        var e_2, _a;
         var pathParts = pathToPrepare.split('/');
         var pathBuilt = pathParts[0];
-        for (var _i = 0, pathParts_1 = pathParts; _i < pathParts_1.length; _i++) {
-            var pathPart = pathParts_1[_i];
-            if (pathBuilt.includes(pathPart)) {
-                continue;
+        try {
+            for (var pathParts_1 = __values(pathParts), pathParts_1_1 = pathParts_1.next(); !pathParts_1_1.done; pathParts_1_1 = pathParts_1.next()) {
+                var pathPart = pathParts_1_1.value;
+                if (pathBuilt.includes(pathPart)) {
+                    continue;
+                }
+                var pathCheck = path.join(pathBuilt, pathPart);
+                //			console.log('PathCheck: ', pathCheck);
+                if (!fs.existsSync(pathCheck)) {
+                    fs.mkdirSync(pathCheck);
+                }
+                pathBuilt = path.join(pathBuilt, pathPart);
             }
-            var pathCheck = path.join(pathBuilt, pathPart);
-            //			console.log('PathCheck: ', pathCheck);
-            if (!fs.existsSync(pathCheck)) {
-                fs.mkdirSync(pathCheck);
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (pathParts_1_1 && !pathParts_1_1.done && (_a = pathParts_1.return)) _a.call(pathParts_1);
             }
-            pathBuilt = path.join(pathBuilt, pathPart);
+            finally { if (e_2) throw e_2.error; }
         }
     };
     VueClassStoresPlugin.prototype.camelize = function (str) {
