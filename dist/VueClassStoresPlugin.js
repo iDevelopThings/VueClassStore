@@ -85,7 +85,7 @@ var VueClassStoresPlugin = /** @class */ (function () {
     VueClassStoresPlugin.prototype.prepare = function () {
         this.preparePath(this.pluginDirectory);
         this.preparePath(this.storesDirectory);
-        this.cleanFiles();
+        //this.cleanFiles();
         var files = this.walkDirectory(this.storesPath);
         for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
             var _a = files_1[_i], filePath = _a.filePath, stat = _a.stat, isSubDir = _a.isSubDir;
