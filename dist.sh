@@ -22,3 +22,5 @@ cd dist || exit
 npm publish --access public
 
 cd ../ || exit
+
+git push origin main
