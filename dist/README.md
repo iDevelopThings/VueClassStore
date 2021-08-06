@@ -74,8 +74,7 @@ If webpack errors whilst building, the plugin wont generate it's files... which 
 It's also handy for when getting everything set up.
 
 ```shell
-# Run this command in your terminal
-./node_modules/.bin/v~~~~ue-class-stores-generate
+npm run-script generate-class-stores
 ```
 
 **Run a build of your application**
