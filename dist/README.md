@@ -30,7 +30,7 @@ yarn add vue-class-stores
 **Add to your webpack configuration:**
 
 ```js
-const {VueClassStoresLoader} = require('./dist/Webpack');
+const {VueClassStoresLoader} = require('vue-class-stores/Webpack');
 
 //....
 
@@ -50,6 +50,31 @@ plugins : [
 		shortVueDeclaration : false,
 	})
 ]
+```
+
+**You can also define your configuration in package.json**
+
+You would only really need to do this when using the generate command listed below
+
+```json
+{
+  "vue-class-stores": {
+    "usingTypescript": true,
+    "shortVueDeclaration": true,
+    "pluginDirectory": "src/Stores/Plugin",
+    "storesDirectory": "src/Stores"
+  }
+}
+```
+
+**Generate plugin/store files**
+
+If webpack errors whilst building, the plugin wont generate it's files... which could be the case in some scenarios.
+
+It's also handy for when getting everything set up.
+
+```shell
+npm run-script generate-class-stores
 ```
 
 **Run a build of your application**
