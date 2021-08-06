@@ -125,7 +125,7 @@ export class VueClassStoresPlugin {
 		this.preparePath(this.pluginDirectory);
 		this.preparePath(this.storesDirectory);
 
-		this.cleanFiles();
+		//this.cleanFiles();
 
 		const files = this.walkDirectory(this.storesPath);
 
