@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-var VueClassStoresLoader = require("./../Webpack/VueClassStoresLoader");
+const {VueClassStoresLoader} = require("./../Webpack/VueClassStoresLoader");
 
 VueClassStoresLoader.generate();
