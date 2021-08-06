@@ -14,6 +14,9 @@
     "generate-dev": "node dist/generate.js",
     "deploy-update": "./dist.sh"
   },
+  "bin": {
+    "vue-class-stores-generate": "bin/vue-class-stores-generate.js"
+  },
   "keywords": [],
   "repository": {
     "url": "https://github.com/iDevelopThings/VueClassStore",
