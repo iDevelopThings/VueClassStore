@@ -35,6 +35,13 @@ export const walkDirectory = (directory: string, isSubDir = false): WalkDirector
 export const writeFile = (path: string, content: string) => {
 	ensureDirectoryExists(path);
 
+	if (fs.existsSync(path)) {
+		const currentContents = fs.readFileSync(path, {encoding : 'utf-8'});
+		if (currentContents === content) {
+			return;
+		}
+	}
+
 	fs.writeFileSync(path, content);
 };
 
@@ -95,3 +102,16 @@ export const getTemplate = (name: string, vueVersion: number) => {
 		{encoding : 'utf-8'},
 	);
 };
+
+
+export const isInternallyGeneratedFile = file => {
+	const files    = Object.values(Configuration.fileNames(true, true));
+
+	for (let internalFile of files) {
+		if (file.includes(path.resolve(internalFile)) || file.includes(internalFile)) {
+			return true;
+		}
+	}
+
+	return false;
+}

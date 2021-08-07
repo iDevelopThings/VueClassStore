@@ -1,3 +1,0 @@
-		/** @type {{{name}}} */
-		app.config.globalProperties.${{globalName}} = {{camelName}};
-		app.provide({{name}}Symbol, {{camelName}});

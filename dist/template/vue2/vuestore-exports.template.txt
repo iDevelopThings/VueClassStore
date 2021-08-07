@@ -1,3 +1,0 @@
-/** @type {{{name}}} */
-export const {{camelName}} = new {{name}}();
-export const {{name}}Symbol = Symbol();

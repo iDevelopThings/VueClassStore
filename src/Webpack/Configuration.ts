@@ -104,7 +104,7 @@ export class Configuration {
 	public static fileNames(withExtensions = false, absolutePath = false): { stores: string, definitions: string, plugin: string } {
 		const fileNames = {
 			stores      : 'VueStores',
-			definitions : 'VueStoresTypeDefinitions.d.ts',
+			definitions : 'VueClassStoresPluginTypes.d.ts',
 			plugin      : 'VueClassStoresPlugin',
 		};
 

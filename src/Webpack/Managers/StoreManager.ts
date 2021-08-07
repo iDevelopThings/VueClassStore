@@ -1,6 +1,6 @@
 import fs from "fs";
 import {Configuration} from "../Configuration";
-import {PluginManager} from "./PluginManager";
+import {PluginManager, PluginStoreImportsObject} from "./PluginManager";
 import {camelize, ensureDirectoryExists, getTemplate, walkDirectory, writeFile} from "../Utilities";
 
 export type StoreModule = {
@@ -15,6 +15,16 @@ export type StoreModule = {
 	isInSubDir: boolean
 }
 
+export type StoreExportsObject = {
+	exportConstName: string;
+	constructorName: string;
+}
+
+export type StoreExportsImportsObject = {
+	imports: PluginStoreImportsObject[],
+	exports: StoreExportsObject[],
+}
+
 export class StoreManager {
 	public static stores: StoreModule[] = [];
 	public static storeExports: string  = null;
@@ -22,6 +32,8 @@ export class StoreManager {
 	public static loadStores() {
 		ensureDirectoryExists(Configuration.storesPath);
 		ensureDirectoryExists(Configuration.pluginPath);
+
+		this.stores = [];
 
 		const files = walkDirectory(Configuration.storesPath);
 
@@ -46,6 +58,16 @@ export class StoreManager {
 		}
 	}
 
+	public static storeExportsObject(): StoreExportsImportsObject {
+		return {
+			imports : PluginManager.pluginStoreImportsObject(),
+			exports : this.stores.map(store => ({
+				exportConstName : store.globalName,
+				constructorName : store.name,
+			}))
+		};
+	}
+
 	public static generateStoreExportsFile() {
 		this.storeExports = '';
 
@@ -59,7 +81,8 @@ export class StoreManager {
 
 		this.storeExports += this.stores.map(store => exportsTemplate
 			.replaceAll('{{name}}', store.name)
-			.replaceAll('{{camelName}}', store.camelName),
+			.replaceAll('{{camelName}}', store.camelName)
+			.replaceAll('{{globalName}}', store.globalName),
 		).join("\n");
 
 		writeFile(Configuration.storesFilePath, this.storeExports);

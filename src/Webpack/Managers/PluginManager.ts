@@ -4,25 +4,39 @@ import {Configuration} from "../Configuration";
 import {StoreManager} from "./StoreManager";
 import {getTemplate, writeFile} from "../Utilities";
 
+export type PluginStoreImportsObject = {
+	moduleName: string;
+	importPath: string;
+}
 
 export class PluginManager {
 
 	public static pluginStoreImports: string    = null;
 	public static vuePluginStoreImports: string = null;
 
-	public static generatePluginStoreImports() {
-		this.pluginStoreImports = StoreManager.stores
+	public static pluginStoreImportsObject(): PluginStoreImportsObject[] {
+		return StoreManager.stores
 			.map(m => {
 				const storePath = path.relative(
 					path.resolve(...Configuration.pluginDirectory.split('/')),
 					m.absolutePath,
 				).replace(Configuration.fileExtension, '');
 
-				return `import {${m.name}} from "${storePath}";`;
+				return {
+					moduleName : m.name,
+					importPath : storePath,
+				};
+			});
+	}
+
+	public static generatePluginStoreImports() {
+		this.pluginStoreImports = this.pluginStoreImportsObject()
+			.map(m => {
+				return `import {${m.moduleName}} from "${m.importPath}";`;
 			})
 			.join("\n");
 
-		let fileNamesImport = StoreManager.stores.map(m => m.camelName);
+		let fileNamesImport = StoreManager.stores.map(m => m.globalName);
 
 		if (Configuration.vueVersion === 3) {
 			fileNamesImport.push(...StoreManager.stores.map(m => m.name + 'Symbol'));
@@ -59,5 +73,6 @@ export class PluginManager {
 			}
 		});
 	}
+
 
 }
