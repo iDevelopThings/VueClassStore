@@ -1,4 +1,8 @@
-import {observableObject} from "{{pluginPath}}";
+import Vue from "vue";
+
+export const observableObject = <T>(obj : T) => {
+	return Vue.observable<T>(obj as T)
+}
 
 export class Store<T> {
 

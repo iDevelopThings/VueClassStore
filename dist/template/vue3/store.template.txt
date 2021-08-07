@@ -1,5 +1,9 @@
-import {observableObject} from "{{pluginPath}}";
 import {UnwrapNestedRefs} from "@vue/reactivity";
+import {reactive} from "vue";
+
+export const observableObject = <T extends object>(obj : T) => {
+	return reactive<T>(obj as T);
+}
 
 export class Store<T extends object> {
 
