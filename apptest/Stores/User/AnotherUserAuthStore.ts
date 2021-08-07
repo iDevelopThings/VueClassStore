@@ -1,4 +1,4 @@
-import {Store} from "../../../dist";
+import { Store } from "../Plugin/Store";
 
 type UserAuthStoreState = {
 	user: object;

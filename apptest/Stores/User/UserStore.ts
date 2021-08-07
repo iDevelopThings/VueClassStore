@@ -1,5 +1,5 @@
-import {Store} from "../../../dist";
-import {userAuthStore} from "../Plugin/VueStores";
+import { Store } from "../Plugin/Store";
+import {userAuth} from "../Plugin/VueStores";
 
 type UserStoreState = {
 	user: object;
@@ -18,6 +18,6 @@ export class UserStore extends Store<UserStoreState> {
 	}
 
 	setMessage() {
-		userAuthStore.message = 'reee';
+		userAuth.message = 'reee';
 	}
 }

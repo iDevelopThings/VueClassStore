@@ -64,12 +64,6 @@ var walkDirectory = function (directory, isSubDir) {
 exports.walkDirectory = walkDirectory;
 var writeFile = function (path, content) {
     exports.ensureDirectoryExists(path);
-    if (fs_1.default.existsSync(path)) {
-        var currentContents = fs_1.default.readFileSync(path, { encoding: 'utf-8' });
-        if (currentContents === content) {
-            return;
-        }
-    }
     fs_1.default.writeFileSync(path, content);
 };
 exports.writeFile = writeFile;

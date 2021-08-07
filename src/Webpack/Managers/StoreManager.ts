@@ -38,6 +38,11 @@ export class StoreManager {
 		const files = walkDirectory(Configuration.storesPath);
 
 		for (let {filePath, isSubDir} of files) {
+
+			if (filePath.includes(Configuration.fileNames(true, true).storeClass)) {
+				continue;
+			}
+
 			const fileName       = filePath.split('/').pop();
 			const name           = fileName.split('.').shift();
 			const shortName      = fileName.split('.').shift().replace('Store', '');

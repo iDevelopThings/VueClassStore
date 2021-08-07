@@ -1,8 +1,8 @@
 import Vue from "vue";
 import TestComp from "./components/TestComp.vue";
-import VueStorePlugin from "./Stores/Plugin/VueStorePlugin";
+import {VueClassStoresPlugin} from "./Stores/Plugin/VueClassStoresPlugin";
 
-Vue.use(VueStorePlugin);
+Vue.use(VueClassStoresPlugin);
 
 Vue.component('TestComp', TestComp);
 

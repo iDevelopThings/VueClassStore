@@ -85,13 +85,15 @@ Now if you navigate to /src/Stores/ you will see a **Plugin** directory. These a
 
 **VueStores** - This is an export of all your stores that will maintain state, it will allow you to use your stores in different classes and such.
 
-**VueStoresTypeDefinitions.d.ts** - This should help your ide understand that you're using a store in your vuejs templates and understand that they're
+**VueClassStoresPluginTypes.d.ts** - This should help your ide understand that you're using a store in your vuejs templates and understand that they're
 registered with Vue.
+
+**Store** - All of your store classes should extend this class. It's automatically generated depending on your vue project version. It just provides some basic functionality for everything to work easily.
 
 **You can now add the plugin to your vue app**
 
 ```ts
-import {VueClassStoresPlugin} from "./Stores/Plugin/VueStorePlugin";
+import {VueClassStoresPlugin} from "./Stores/Plugin/VueClassStoresPlugin";
 
 Vue.use(VueClassStoresPlugin);
 
@@ -103,7 +105,7 @@ const app = new Vue({el : "#app"});
 If you're using typescript, you can create a type for your store object and provide this as a generic to Store
 
 ```ts 
-import {Store} from "vue-class-stores";
+import {Store} from "./Plugin/Store";
 
 type UserStoreState = {
 	user: object;
@@ -121,7 +123,7 @@ export class UserStore extends Store<UserStoreState> {
 You can use initialState() function. This provides the base state for your store, you can see this like vues data() object on a vuejs single file component.
 
 ```ts
-import {Store} from "vue-class-stores";
+import {Store} from "./Plugin/Store";
 
 type UserStoreState = {
 	user: object;
@@ -145,7 +147,7 @@ export class UserStore extends Store<UserStoreState> {
 You can also do it this way
 
 ```ts
-import {Store} from "vue-class-stores";
+import {Store} from "./Plugin/Store";
 
 type UserStoreState = {
 	user: object;
@@ -167,7 +169,7 @@ export class UserStore extends Store<UserStoreState> {
 **Example Store**:
 
 ```ts
-import {Store} from "vue-class-stores";
+import {Store} from "./Plugin/Store";
 
 type UserStoreState = {
 	message: string;

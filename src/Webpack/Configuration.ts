@@ -104,11 +104,11 @@ export class Configuration {
 
 		this.storeClassFilePath     = path.resolve(
 			...this.pluginDirectory.split('/'),
-			this.fileNames(true).plugin,
+			this.fileNames(true).storeClass,
 		);
 	}
 
-	public static fileNames(withExtensions = false, absolutePath = false): { stores: string, definitions: string, plugin: string } {
+	public static fileNames(withExtensions = false, absolutePath = false): { stores: string, definitions: string, plugin: string, storeClass: string } {
 		const fileNames = {
 			stores      : 'VueStores',
 			definitions : 'VueClassStoresPluginTypes.d.ts',

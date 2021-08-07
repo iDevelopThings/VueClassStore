@@ -70,7 +70,7 @@ var PluginManager = /** @class */ (function () {
     };
     PluginManager.generateStoreClass = function () {
         var template = Utilities_1.getTemplate('store', Configuration_1.Configuration.vueVersion);
-        var pluginPath = path.relative(path.resolve(Configuration_1.Configuration.fileNames(false, true).plugin), path.resolve(Configuration_1.Configuration.pluginDirectory));
+        var pluginPath = "./" + Configuration_1.Configuration.fileNames(false).plugin;
         template = template.replaceAll('{{pluginPath}}', pluginPath);
         Utilities_1.writeFile(Configuration_1.Configuration.storeClassFilePath, template);
     };

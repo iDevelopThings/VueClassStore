@@ -67,10 +67,7 @@ export class PluginManager {
 	public static generateStoreClass() {
 		let template = getTemplate('store', Configuration.vueVersion);
 
-		const pluginPath = path.relative(
-			path.resolve(Configuration.fileNames(false, true).plugin),
-			path.resolve(Configuration.pluginDirectory)
-		)
+		const pluginPath = `./${Configuration.fileNames(false).plugin}`;
 
 		template = template.replaceAll('{{pluginPath}}', pluginPath);
 

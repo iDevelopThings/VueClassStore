@@ -27,6 +27,9 @@ var StoreManager = /** @class */ (function () {
         try {
             for (var files_1 = __values(files), files_1_1 = files_1.next(); !files_1_1.done; files_1_1 = files_1.next()) {
                 var _b = files_1_1.value, filePath = _b.filePath, isSubDir = _b.isSubDir;
+                if (filePath.includes(Configuration_1.Configuration.fileNames(true, true).storeClass)) {
+                    continue;
+                }
                 var fileName = filePath.split('/').pop();
                 var name_1 = fileName.split('.').shift();
                 var shortName = fileName.split('.').shift().replace('Store', '');

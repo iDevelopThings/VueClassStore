@@ -88,7 +88,7 @@ var Configuration = /** @class */ (function () {
         this.storesFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).stores]));
         this.definitionsFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).definitions]));
         this.vueStorePluginFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).plugin]));
-        this.storeClassFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).plugin]));
+        this.storeClassFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).storeClass]));
     };
     Configuration.fileNames = function (withExtensions, absolutePath) {
         if (withExtensions === void 0) { withExtensions = false; }

@@ -20,12 +20,18 @@ export class VueClassStoresLoader {
 
 	apply(compiler: Compiler) {
 
-		compiler.hooks.run.tap('VueClassStoreLoader', (compiler: Compiler) => {
+		/*compiler.hooks.run.tap('VueClassStoreLoader', (compiler: Compiler) => {
+			console.log('Re-generating vue-class-store loader files.');
 			VueClassStoresLoader.generate(undefined, this.configuration);
-		});
+		});*/
 
-		compiler.hooks.watchRun.tap('VueClassStoreLoader', (compiler: Compiler) => {
-			this.setupWatcher();
+		compiler.hooks.initialize.tap('VueClassStoreLoader', () => {
+			console.log('Starting vue-class-store watcher.');
+
+			VueClassStoresLoader.generate(undefined, this.configuration);
+
+			if (compiler.watching)
+				this.setupWatcher();
 		});
 
 
@@ -74,7 +80,7 @@ export class VueClassStoresLoader {
 			throw new Error(ERROR);
 		}
 
-//		PluginManager.clearFiles();
+		//		PluginManager.clearFiles();
 
 		PluginManager.generateStoreClass();
 

@@ -41,5 +41,6 @@ export declare class Configuration {
         stores: string;
         definitions: string;
         plugin: string;
+        storeClass: string;
     };
 }

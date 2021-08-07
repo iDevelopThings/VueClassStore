@@ -1,8 +1,8 @@
-import Vue from "vue";
+import {observableObject} from "./VueClassStoresPlugin";
 
 export class Store<T> {
 
-	public state: T = Vue.observable<T>({} as T);
+	public state: T = observableObject<T>({} as T);
 
 	constructor() {
 		const initialState = this.initialState();
@@ -11,7 +11,7 @@ export class Store<T> {
 			return;
 		}
 
-		this.state = Vue.observable<T>(initialState);
+		this.state = observableObject<T>(initialState);
 	}
 
 	public initialState(): T {
