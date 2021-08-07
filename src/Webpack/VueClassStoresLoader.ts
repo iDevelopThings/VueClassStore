@@ -20,17 +20,15 @@ export class VueClassStoresLoader {
 
 	apply(compiler: Compiler) {
 
-		compiler.hooks.entryOption.tap(
-			'VueClassStoreLoader',
-			//@ts-ignore
-			(...args: AsArray<string, EntryNormalized>) => {
+		compiler.hooks.run.tap('VueClassStoreLoader', (compiler: Compiler) => {
+			VueClassStoresLoader.generate(undefined, this.configuration);
+		});
 
-				VueClassStoresLoader.generate(undefined, this.configuration);
+		compiler.hooks.watchRun.tap('VueClassStoreLoader', (compiler: Compiler) => {
+			this.setupWatcher();
+		});
 
-				this.setupWatcher();
 
-				return true;
-			});
 	}
 
 	public setupWatcher() {
@@ -46,10 +44,10 @@ export class VueClassStoresLoader {
 		watcher.on('all', (event, filename) => {
 
 			if (event !== 'add' && event !== 'unlink' && event !== 'change') {
-				return
+				return;
 			}
 
-			if(isInternallyGeneratedFile(filename)) {
+			if (isInternallyGeneratedFile(filename)) {
 				return;
 			}
 

@@ -18,16 +18,11 @@ var VueClassStoresLoader = /** @class */ (function () {
     }
     VueClassStoresLoader.prototype.apply = function (compiler) {
         var _this = this;
-        compiler.hooks.entryOption.tap('VueClassStoreLoader', 
-        //@ts-ignore
-        function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
+        compiler.hooks.run.tap('VueClassStoreLoader', function (compiler) {
             VueClassStoresLoader.generate(undefined, _this.configuration);
+        });
+        compiler.hooks.watchRun.tap('VueClassStoreLoader', function (compiler) {
             _this.setupWatcher();
-            return true;
         });
     };
     VueClassStoresLoader.prototype.setupWatcher = function () {
