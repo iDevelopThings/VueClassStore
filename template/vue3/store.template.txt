@@ -1,9 +1,9 @@
 import {observableObject} from "{{pluginPath}}";
-import {Reactive} from "vue";
+import {UnwrapNestedRefs} from "@vue/reactivity";
 
 export class Store<T extends object> {
 
-	public state: Reactive<T> = observableObject<T>({} as T);
+	public state: UnwrapNestedRefs<T> = observableObject<T>({} as T);
 
 	constructor() {
 		const initialState = this.initialState();
