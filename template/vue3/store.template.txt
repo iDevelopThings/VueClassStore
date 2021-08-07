@@ -1,8 +1,9 @@
 import {observableObject} from "{{pluginPath}}";
+import {Ref, UnwrapRef} from "vue";
 
 export class Store<T> {
 
-	public state: T = observableObject<T>({} as T);
+	public state: Ref<UnwrapRef<T>> = observableObject<T>({} as T);
 
 	constructor() {
 		const initialState = this.initialState();
