@@ -21,18 +21,19 @@ export class VueClassStoresLoader {
 	apply(compiler: Compiler) {
 
 		/*compiler.hooks.run.tap('VueClassStoreLoader', (compiler: Compiler) => {
-			console.log('Re-generating vue-class-store loader files.');
-			VueClassStoresLoader.generate(undefined, this.configuration);
-		});*/
+		 console.log('Re-generating vue-class-store loader files.');
+		 VueClassStoresLoader.generate(undefined, this.configuration);
+		 });*/
 
-		compiler.hooks.initialize.tap('VueClassStoreLoader', () => {
-			console.log('Starting vue-class-store watcher.');
+		if (compiler.hooks.initialize)
+			compiler.hooks.initialize.tap('VueClassStoreLoader', () => {
+				console.log('Starting vue-class-store watcher.');
 
-			VueClassStoresLoader.generate(undefined, this.configuration);
+				VueClassStoresLoader.generate(undefined, this.configuration);
 
-			if (compiler.watching)
-				this.setupWatcher();
-		});
+				if (compiler.watching)
+					this.setupWatcher();
+			});
 
 
 	}
