@@ -20,44 +20,12 @@ export class VueClassStoresLoader {
 
 	apply(compiler: Compiler) {
 
-		/*compiler.watchFileSystem = new IgnoringWatchFileSystem(
-		 compiler.watchFileSystem,
-		 [
-		 ...Object.values(Configuration.fileNames(true, true)),
-		 'dist/Webpack/!**!/!*'
-		 ]
-		 );*/
-
-		//		compiler.hooks.assetEmitted.tap('VueClassStoreLoader', (file, {content, source, outputPath, compilation, targetPath}) => {
-		//			const files = Object.values(Configuration.fileNames(true, true));
-		//
-		//			for (let intFiles of files) {
-		//				if (file.includes(intFiles)) {
-		//					console.log('ASSET EMITTED: ', file, {
-		//						content : content, source : source, outputPath : outputPath, compilation : compilation, targetPath : targetPath
-		//					});
-		//				}
-		//			}
-		//
-		//		});
-
-
 		compiler.hooks.entryOption.tap(
 			'VueClassStoreLoader',
 			//@ts-ignore
 			(...args: AsArray<string, EntryNormalized>) => {
-				/*if (compiler.modifiedFiles) {
-				 const files    = Object.values(Configuration.fileNames(true, true));
-				 const modified = [...compiler.modifiedFiles.values()];
 
-				 for (let file of files) {
-				 if (modified.includes(path.resolve(file))) {
-				 return;
-				 }
-				 }
-
-				 console.log('MODIFIED FILES: ', compiler.modifiedFiles);
-				 }*/
+				VueClassStoresLoader.generate(undefined, this.configuration);
 
 				this.setupWatcher();
 
@@ -67,12 +35,8 @@ export class VueClassStoresLoader {
 
 	public setupWatcher() {
 		if (watcher) {
-			console.log('Tried to create new watcher but one already exists.');
 			return;
 		}
-
-
-		console.log('Watcher initialized.');
 
 		watcher = chokidar.watch(Configuration.storesPath, {
 			ignoreInitial : true,
@@ -88,8 +52,6 @@ export class VueClassStoresLoader {
 			if(isInternallyGeneratedFile(filename)) {
 				return;
 			}
-
-			console.log('Watcher event: ', event, filename);
 
 			VueClassStoresLoader.generate(undefined, this.configuration);
 

@@ -17,45 +17,15 @@ var VueClassStoresLoader = /** @class */ (function () {
         Configuration_1.Configuration.setConfiguration(configuration);
     }
     VueClassStoresLoader.prototype.apply = function (compiler) {
-        /*compiler.watchFileSystem = new IgnoringWatchFileSystem(
-         compiler.watchFileSystem,
-         [
-         ...Object.values(Configuration.fileNames(true, true)),
-         'dist/Webpack/!**!/!*'
-         ]
-         );*/
         var _this = this;
-        //		compiler.hooks.assetEmitted.tap('VueClassStoreLoader', (file, {content, source, outputPath, compilation, targetPath}) => {
-        //			const files = Object.values(Configuration.fileNames(true, true));
-        //
-        //			for (let intFiles of files) {
-        //				if (file.includes(intFiles)) {
-        //					console.log('ASSET EMITTED: ', file, {
-        //						content : content, source : source, outputPath : outputPath, compilation : compilation, targetPath : targetPath
-        //					});
-        //				}
-        //			}
-        //
-        //		});
         compiler.hooks.entryOption.tap('VueClassStoreLoader', 
         //@ts-ignore
         function () {
-            /*if (compiler.modifiedFiles) {
-             const files    = Object.values(Configuration.fileNames(true, true));
-             const modified = [...compiler.modifiedFiles.values()];
-
-             for (let file of files) {
-             if (modified.includes(path.resolve(file))) {
-             return;
-             }
-             }
-
-             console.log('MODIFIED FILES: ', compiler.modifiedFiles);
-             }*/
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
+            VueClassStoresLoader.generate(undefined, _this.configuration);
             _this.setupWatcher();
             return true;
         });
@@ -63,10 +33,8 @@ var VueClassStoresLoader = /** @class */ (function () {
     VueClassStoresLoader.prototype.setupWatcher = function () {
         var _this = this;
         if (watcher) {
-            console.log('Tried to create new watcher but one already exists.');
             return;
         }
-        console.log('Watcher initialized.');
         watcher = chokidar_1.default.watch(Configuration_1.Configuration.storesPath, {
             ignoreInitial: true,
             ignored: Object.values(Configuration_1.Configuration.fileNames(true, true))
@@ -78,7 +46,6 @@ var VueClassStoresLoader = /** @class */ (function () {
             if (Utilities_1.isInternallyGeneratedFile(filename)) {
                 return;
             }
-            console.log('Watcher event: ', event, filename);
             VueClassStoresLoader.generate(undefined, _this.configuration);
             console.log('Re-generated vue-class-store files.');
         });
