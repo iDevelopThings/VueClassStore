@@ -23,7 +23,7 @@ var VueClassStoresLoader = /** @class */ (function () {
          });*/
         console.log('Re-generating vue-class-store loader files.');
         VueClassStoresLoader.generate(undefined, this.configuration);
-        if (compiler.watching) {
+        if (compiler.watching || compiler.watchMode) {
             this.setupWatcher();
         }
         /*if (compiler.hooks.initialize)

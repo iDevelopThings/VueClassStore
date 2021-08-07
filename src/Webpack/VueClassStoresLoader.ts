@@ -29,7 +29,7 @@ export class VueClassStoresLoader {
 
 		VueClassStoresLoader.generate(undefined, this.configuration);
 
-		if (compiler.watching) {
+		if (compiler.watching || compiler.watchMode) {
 			this.setupWatcher();
 		}
 
