@@ -1,9 +1,9 @@
 import {observableObject} from "{{pluginPath}}";
-import {Ref, UnwrapRef} from "vue";
+import {Reactive} from "vue";
 
-export class Store<T> {
+export class Store<T extends object> {
 
-	public state: Ref<UnwrapRef<T>> = observableObject<T>({} as T);
+	public state: Reactive<T> = observableObject<T>({} as T);
 
 	constructor() {
 		const initialState = this.initialState();
