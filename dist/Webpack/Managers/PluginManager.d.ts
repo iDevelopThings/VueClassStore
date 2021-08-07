@@ -8,5 +8,6 @@ export declare class PluginManager {
     static pluginStoreImportsObject(): PluginStoreImportsObject[];
     static generatePluginStoreImports(): void;
     static generatePlugin(): void;
+    static generateStoreClass(): void;
     static clearFiles(): void;
 }

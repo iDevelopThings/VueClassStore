@@ -88,6 +88,7 @@ var Configuration = /** @class */ (function () {
         this.storesFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).stores]));
         this.definitionsFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).definitions]));
         this.vueStorePluginFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).plugin]));
+        this.storeClassFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).plugin]));
     };
     Configuration.fileNames = function (withExtensions, absolutePath) {
         if (withExtensions === void 0) { withExtensions = false; }
@@ -96,13 +97,16 @@ var Configuration = /** @class */ (function () {
             stores: 'VueStores',
             definitions: 'VueClassStoresPluginTypes.d.ts',
             plugin: 'VueClassStoresPlugin',
+            storeClass: 'Store',
         };
         if (absolutePath) {
+            fileNames.storeClass = path_1.default.join(this.pluginDirectory, fileNames.storeClass);
             fileNames.stores = path_1.default.join(this.pluginDirectory, fileNames.stores);
             fileNames.definitions = path_1.default.join(this.pluginDirectory, fileNames.definitions);
             fileNames.plugin = path_1.default.join(this.pluginDirectory, fileNames.plugin);
         }
         if (withExtensions) {
+            fileNames.storeClass += this.fileExtension;
             fileNames.stores += this.fileExtension;
             fileNames.plugin += this.fileExtension;
         }

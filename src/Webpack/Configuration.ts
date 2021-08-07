@@ -23,6 +23,7 @@ export type ConfigurationManagerConfiguration = {
 	storesFilePath?: string;
 	definitionsFilePath?: string;
 	vueStorePluginFilePath?: string;
+	storeClassFilePath?: string;
 }
 
 export class Configuration {
@@ -39,6 +40,7 @@ export class Configuration {
 	public static storesFilePath?: string;
 	public static definitionsFilePath?: string;
 	public static vueStorePluginFilePath?: string;
+	public static storeClassFilePath?: string;
 
 	public static setConfiguration(configuration?: PluginConfiguration) {
 
@@ -99,6 +101,11 @@ export class Configuration {
 			...this.pluginDirectory.split('/'),
 			this.fileNames(true).plugin,
 		);
+
+		this.storeClassFilePath     = path.resolve(
+			...this.pluginDirectory.split('/'),
+			this.fileNames(true).plugin,
+		);
 	}
 
 	public static fileNames(withExtensions = false, absolutePath = false): { stores: string, definitions: string, plugin: string } {
@@ -106,15 +113,18 @@ export class Configuration {
 			stores      : 'VueStores',
 			definitions : 'VueClassStoresPluginTypes.d.ts',
 			plugin      : 'VueClassStoresPlugin',
+			storeClass  : 'Store',
 		};
 
 		if (absolutePath) {
+			fileNames.storeClass  = path.join(this.pluginDirectory, fileNames.storeClass);
 			fileNames.stores      = path.join(this.pluginDirectory, fileNames.stores);
 			fileNames.definitions = path.join(this.pluginDirectory, fileNames.definitions);
 			fileNames.plugin      = path.join(this.pluginDirectory, fileNames.plugin);
 		}
 
 		if (withExtensions) {
+			fileNames.storeClass += this.fileExtension;
 			fileNames.stores += this.fileExtension;
 			fileNames.plugin += this.fileExtension;
 		}

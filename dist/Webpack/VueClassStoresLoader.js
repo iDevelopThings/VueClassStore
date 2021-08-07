@@ -56,7 +56,8 @@ var VueClassStoresLoader = /** @class */ (function () {
             }
             throw new Error(ERROR);
         }
-        PluginManager_1.PluginManager.clearFiles();
+        //		PluginManager.clearFiles();
+        PluginManager_1.PluginManager.generateStoreClass();
         PluginManager_1.PluginManager.generatePluginStoreImports();
         StoreManager_1.StoreManager.generateStoreExportsFile();
         StoreManager_1.StoreManager.generateTypeDefs();

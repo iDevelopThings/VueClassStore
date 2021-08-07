@@ -68,6 +68,12 @@ var PluginManager = /** @class */ (function () {
             .replaceAll('{{definitions}}', definitions);
         Utilities_1.writeFile(Configuration_1.Configuration.vueStorePluginFilePath, template);
     };
+    PluginManager.generateStoreClass = function () {
+        var template = Utilities_1.getTemplate('store', Configuration_1.Configuration.vueVersion);
+        var pluginPath = path.relative(path.resolve(Configuration_1.Configuration.fileNames(false, true).plugin), path.resolve(Configuration_1.Configuration.pluginDirectory));
+        template = template.replaceAll('{{pluginPath}}', pluginPath);
+        Utilities_1.writeFile(Configuration_1.Configuration.storeClassFilePath, template);
+    };
     PluginManager.clearFiles = function () {
         Object.values(Configuration_1.Configuration.fileNames(true)).forEach(function (name) {
             var filePath = path.join.apply(path, __spreadArray(__spreadArray([], __read(Configuration_1.Configuration.pluginDirectory.split('/'))), [name]));

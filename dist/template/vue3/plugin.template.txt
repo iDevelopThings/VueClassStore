@@ -5,3 +5,8 @@ export const VueClassStoresPlugin = {
 {{definitions}}
 	}
 };
+
+import {ref} from "vue";
+export const observableObject = <T>(object) => {
+	return ref<T>(object);
+}

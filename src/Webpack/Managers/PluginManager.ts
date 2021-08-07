@@ -64,6 +64,19 @@ export class PluginManager {
 		writeFile(Configuration.vueStorePluginFilePath, template);
 	}
 
+	public static generateStoreClass() {
+		let template = getTemplate('store', Configuration.vueVersion);
+
+		const pluginPath = path.relative(
+			path.resolve(Configuration.fileNames(false, true).plugin),
+			path.resolve(Configuration.pluginDirectory)
+		)
+
+		template = template.replaceAll('{{pluginPath}}', pluginPath);
+
+		writeFile(Configuration.storeClassFilePath, template);
+	}
+
 	public static clearFiles() {
 		Object.values(Configuration.fileNames(true)).forEach(name => {
 			const filePath = path.join(...Configuration.pluginDirectory.split('/'), name);

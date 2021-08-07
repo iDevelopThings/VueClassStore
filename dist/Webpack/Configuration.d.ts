@@ -18,6 +18,7 @@ export declare type ConfigurationManagerConfiguration = {
     storesFilePath?: string;
     definitionsFilePath?: string;
     vueStorePluginFilePath?: string;
+    storeClassFilePath?: string;
 };
 export declare class Configuration {
     static usingTypescript: boolean;
@@ -32,6 +33,7 @@ export declare class Configuration {
     static storesFilePath?: string;
     static definitionsFilePath?: string;
     static vueStorePluginFilePath?: string;
+    static storeClassFilePath?: string;
     static setConfiguration(configuration?: PluginConfiguration): void;
     static set(key: keyof ConfigurationManagerConfiguration, value: any): void;
     private static setupConfiguration;

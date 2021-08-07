@@ -74,7 +74,9 @@ export class VueClassStoresLoader {
 			throw new Error(ERROR);
 		}
 
-		PluginManager.clearFiles();
+//		PluginManager.clearFiles();
+
+		PluginManager.generateStoreClass();
 
 		PluginManager.generatePluginStoreImports();
 
