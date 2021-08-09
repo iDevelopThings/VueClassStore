@@ -74,7 +74,7 @@ If webpack errors whilst building, the plugin wont generate it's files... which 
 It's also handy for when getting everything set up.
 
 ```shell
-npm run-script generate-class-stores
+./node_modules/.bin/vue-class-stores-generate
 ```
 
 **Run a build of your application**
