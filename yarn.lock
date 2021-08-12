@@ -4329,11 +4329,6 @@ vue-class-component@^7.2.6:
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
   integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
 
-vue-composition-api@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/vue-composition-api/-/vue-composition-api-0.0.1.tgz#e4d330ca6c620cfbe58484e869b556dc51b08e10"
-  integrity sha512-NVfEyDSx+JVnLCi2W0lWGub+3XStijUoSLePD+z7CCIN6NxMjcDmt6PzLJ4KfSxAQJ8YwRZoGwSXJp33oSHVAg==
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"

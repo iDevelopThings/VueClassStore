@@ -1,4 +1,12 @@
 import { VueVersionManager } from "./Managers/VueVersionManager";
+export declare type FileNames = {
+    stores: string;
+    definitions: string;
+    plugin: string;
+    storeClass: string;
+    vueCompApi: string;
+    vueCompApiExports: string;
+};
 export declare type PluginConfiguration = {
     usingTypescript?: boolean;
     pluginDirectory?: string;
@@ -33,14 +41,11 @@ export declare class Configuration {
     static storesFilePath?: string;
     static definitionsFilePath?: string;
     static vueStorePluginFilePath?: string;
+    static vueCompositionInstallScriptFilePath?: string;
+    static vueCompositionExportsFilePath?: string;
     static storeClassFilePath?: string;
     static setConfiguration(configuration?: PluginConfiguration): void;
     static set(key: keyof ConfigurationManagerConfiguration, value: any): void;
     private static setupConfiguration;
-    static fileNames(withExtensions?: boolean, absolutePath?: boolean): {
-        stores: string;
-        definitions: string;
-        plugin: string;
-        storeClass: string;
-    };
+    static fileNames(withExtensions?: boolean, absolutePath?: boolean): FileNames;
 }

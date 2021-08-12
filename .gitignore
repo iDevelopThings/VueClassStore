@@ -11,3 +11,4 @@ node_modules/
 /apptestdist/
 /package/
 dist-local.sh
+/apptest/app.dist.js

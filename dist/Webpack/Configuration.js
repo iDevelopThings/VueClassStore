@@ -88,6 +88,8 @@ var Configuration = /** @class */ (function () {
         this.storesFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).stores]));
         this.definitionsFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).definitions]));
         this.vueStorePluginFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).plugin]));
+        this.vueCompositionExportsFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).vueCompApiExports]));
+        this.vueCompositionInstallScriptFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).vueCompApi]));
         this.storeClassFilePath = path_1.default.resolve.apply(path_1.default, __spreadArray(__spreadArray([], __read(this.pluginDirectory.split('/'))), [this.fileNames(true).storeClass]));
     };
     Configuration.fileNames = function (withExtensions, absolutePath) {
@@ -98,17 +100,23 @@ var Configuration = /** @class */ (function () {
             definitions: 'VueClassStoresPluginTypes.d.ts',
             plugin: 'VueClassStoresPlugin',
             storeClass: 'Store',
+            vueCompApi: 'InstallVueCompositionApi',
+            vueCompApiExports: 'VueCompositionApiExports',
         };
         if (absolutePath) {
             fileNames.storeClass = path_1.default.join(this.pluginDirectory, fileNames.storeClass);
             fileNames.stores = path_1.default.join(this.pluginDirectory, fileNames.stores);
             fileNames.definitions = path_1.default.join(this.pluginDirectory, fileNames.definitions);
             fileNames.plugin = path_1.default.join(this.pluginDirectory, fileNames.plugin);
+            fileNames.vueCompApi = path_1.default.join(this.pluginDirectory, fileNames.vueCompApi);
+            fileNames.vueCompApiExports = path_1.default.join(this.pluginDirectory, fileNames.vueCompApiExports);
         }
         if (withExtensions) {
             fileNames.storeClass += this.fileExtension;
             fileNames.stores += this.fileExtension;
             fileNames.plugin += this.fileExtension;
+            fileNames.vueCompApi += this.fileExtension;
+            fileNames.vueCompApiExports += this.fileExtension;
         }
         return fileNames;
     };

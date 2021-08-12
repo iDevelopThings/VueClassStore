@@ -1,3 +1,0 @@
-		/** @type {{{name}}} */
-		app.config.globalProperties.${{globalName}} = {{globalName}};
-		app.provide({{name}}Symbol, {{name}});

@@ -58,6 +58,10 @@ var PluginManager = /** @class */ (function () {
     PluginManager.generatePlugin = function () {
         var template = Utilities_1.getTemplate('plugin', Configuration_1.Configuration.vueVersion);
         var defTemplate = Utilities_1.getTemplate('vuestore-definition', Configuration_1.Configuration.vueVersion);
+        if (Configuration_1.Configuration.vueVersion === 2) {
+            var vueCompApiTemplate = Utilities_1.getTemplate('vue-composition-api-plugin', Configuration_1.Configuration.vueVersion);
+            Utilities_1.writeFile(Configuration_1.Configuration.vueCompositionInstallScriptFilePath, vueCompApiTemplate);
+        }
         var definitions = StoreManager_1.StoreManager.stores.map(function (module) { return defTemplate
             .replaceAll('{{name}}', module.name)
             .replaceAll('{{camelName}}', module.camelName)
@@ -65,14 +69,23 @@ var PluginManager = /** @class */ (function () {
         var imports = this.vuePluginStoreImports + this.pluginStoreImports;
         template = template
             .replaceAll('{{imports}}', imports)
-            .replaceAll('{{definitions}}', definitions);
+            .replaceAll('{{definitions}}', definitions)
+            .replaceAll('{{storeInits}}', StoreManager_1.StoreManager.stores.map(function (module) { return module.globalName + ".setupStore();"; }).join("\n"));
         Utilities_1.writeFile(Configuration_1.Configuration.vueStorePluginFilePath, template);
+    };
+    PluginManager.generateStoreMetaFile = function () {
+        Utilities_1.writeFile(path.join(Configuration_1.Configuration.pluginPath, 'stores.meta.json'), JSON.stringify(StoreManager_1.StoreManager.stores));
     };
     PluginManager.generateStoreClass = function () {
         var template = Utilities_1.getTemplate('store', Configuration_1.Configuration.vueVersion);
         var pluginPath = "./" + Configuration_1.Configuration.fileNames(false).plugin;
-        template = template.replaceAll('{{pluginPath}}', pluginPath);
+        template = template
+            .replaceAll('{{pluginPath}}', pluginPath)
+            .replaceAll('{{storeManagerImport}}', Utilities_1.correctPackageImportName('./../../../dist'));
         Utilities_1.writeFile(Configuration_1.Configuration.storeClassFilePath, template);
+    };
+    PluginManager.generateVueCompositionApiExportsFile = function () {
+        Utilities_1.writeFile(Configuration_1.Configuration.vueCompositionExportsFilePath, Utilities_1.getTemplate('vue-composition-api-exports', Configuration_1.Configuration.vueVersion));
     };
     PluginManager.clearFiles = function () {
         Object.values(Configuration_1.Configuration.fileNames(true)).forEach(function (name) {

@@ -16,5 +16,6 @@ export declare const writeFile: (path: string, content: string) => void;
  */
 export declare const ensureDirectoryExists: (pathToPrepare: string) => void;
 export declare const camelize: (str: any) => any;
+export declare const correctPackageImportName: (importString: string) => string;
 export declare const getTemplate: (name: string, vueVersion: number) => string;
 export declare const isInternallyGeneratedFile: (file: any) => boolean;

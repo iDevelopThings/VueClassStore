@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isInternallyGeneratedFile = exports.getTemplate = exports.camelize = exports.ensureDirectoryExists = exports.writeFile = exports.walkDirectory = void 0;
+exports.isInternallyGeneratedFile = exports.getTemplate = exports.correctPackageImportName = exports.camelize = exports.ensureDirectoryExists = exports.writeFile = exports.walkDirectory = void 0;
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 var Configuration_1 = require("./Configuration");
@@ -86,6 +86,9 @@ var ensureDirectoryExists = function (pathToPrepare) {
             if (pathPart.endsWith(Configuration_1.Configuration.fileExtension)) {
                 continue;
             }
+            if (pathPart.endsWith('.json')) {
+                continue;
+            }
             var pathCheck = path_1.default.join(pathBuilt, pathPart);
             if (!pathCheck.endsWith('/')) {
                 pathCheck += '/';
@@ -115,6 +118,15 @@ var camelize = function (str) {
     }).replace(/\s+/g, '');
 };
 exports.camelize = camelize;
+var correctPackageImportName = function (importString) {
+    var importStringResponse = importString;
+    //Hacky fix to properly reference the packages directory
+    if (!process.cwd().includes('/Packages/VueClassStore')) {
+        importStringResponse = 'vue-class-stores';
+    }
+    return importStringResponse;
+};
+exports.correctPackageImportName = correctPackageImportName;
 var getTemplate = function (name, vueVersion) {
     var rootPackageDir = process.cwd();
     //Hacky fix to properly reference the packages directory

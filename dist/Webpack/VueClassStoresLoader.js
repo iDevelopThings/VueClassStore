@@ -68,6 +68,8 @@ var VueClassStoresLoader = /** @class */ (function () {
             throw new Error(ERROR);
         }
         //		PluginManager.clearFiles();
+        PluginManager_1.PluginManager.generateVueCompositionApiExportsFile();
+        PluginManager_1.PluginManager.generateStoreMetaFile();
         PluginManager_1.PluginManager.generateStoreClass();
         PluginManager_1.PluginManager.generatePluginStoreImports();
         StoreManager_1.StoreManager.generateStoreExportsFile();
