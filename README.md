@@ -20,20 +20,20 @@ entirely different class/location.
 
 ## Getting Started
 
-- [Installing](#Installing the package)
-- [Configuring Webpack](#Configuring Webpack)
-- [Plugin Configuration](#Plugin Configuration)
-- [Generating Store Plugin/Files](#Generate plugin/store files)
-- [Final Setup Steps](#Final Setup Steps)
-  - [Vue 2](#Final Setup Steps #Vue 2)
-  - [Vue 3](#Final Setup Steps #Vue 3)
-- [How to work with the stores?](#How to work with the stores?)
-  - [Creating a store](#Creating a store)
-  - [Using the store in your components](#Using the store in your components)
-    - [Using the store in your components](#SFC Script)
-    - [Using the store in your components](#SFC Html)
-  - [Using the store from outside components](#Using the store from outside components)
-  - [Persisted Stores](#Persisted Stores)
+- [Installing](#installing-the-package)
+- [Configuring Webpack](#configuring-webpack)
+- [Plugin Configuration](#plugin-configuration)
+- [Generating Store Plugin/Files](#generate-plugin/store-files)
+- [Final Setup Steps](#final-setup-steps)
+  - [Vue 2](#final-setup-steps #vue-2)
+  - [Vue 3](#final-setup-steps #vue-3)
+- [How to work with the stores?](#how-to-work-with-the-stores?)
+  - [Creating a store](#creating-a-store)
+  - [Using the store in your components](#using-the-store-in-your-components)
+    - [Using the store in your components](#sfc-script)
+    - [Using the store in your components](#sfc-html)
+  - [Using the store from outside components](#using-the-store-from-outside-components)
+  - [Persisted Stores](#persisted-stores)
 
 ## Installing the package
 
