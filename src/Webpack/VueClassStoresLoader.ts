@@ -91,6 +91,10 @@ export class VueClassStoresLoader {
 
 		//		PluginManager.clearFiles();
 
+		PluginManager.generateVueCompositionApiExportsFile();
+
+		PluginManager.generateStoreMetaFile();
+
 		PluginManager.generateStoreClass();
 
 		PluginManager.generatePluginStoreImports();

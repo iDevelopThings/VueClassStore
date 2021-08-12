@@ -93,6 +93,8 @@ export class StoreManager {
 		writeFile(Configuration.storesFilePath, this.storeExports);
 	}
 
+
+
 	public static generateTypeDefs() {
 		let template = getTemplate('typedef', Configuration.vueVersion);
 

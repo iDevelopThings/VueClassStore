@@ -1,10 +1,12 @@
 import Vue from "vue";
+import './Stores/Plugin/InstallVueCompositionApi';
 import TestComp from "./components/TestComp.vue";
 import {VueClassStoresPlugin} from "./Stores/Plugin/VueClassStoresPlugin";
 
 Vue.use(VueClassStoresPlugin);
 
 Vue.component('TestComp', TestComp);
+
 
 let v = new Vue({
 	el       : "#app",
@@ -15,6 +17,7 @@ let v = new Vue({
 </div>
 `
 });
+
 
 //@ts-ignore
 window.app = v;

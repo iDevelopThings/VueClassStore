@@ -1,23 +1,26 @@
-import { Store } from "../Plugin/Store";
-import {userAuth} from "../Plugin/VueStores";
+import {store, persistedStore, watch} from "../../../dist";
+import {Store} from "../Plugin/Store";
 
 type UserStoreState = {
-	user: object;
+	user: { username: any },
+	something: boolean;
+	id: number;
 }
 
+@persistedStore()
 export class UserStore extends Store<UserStoreState> {
 
 	public initialState(): UserStoreState {
 		return {
-			user : {}
+			user      : {username : null},
+			something : false,
+			id        : 0,
 		};
 	}
 
-	get message() {
-		return "Hello world!";
+	@watch('user')
+	onUserUpdated(value: any) {
+		console.log('User updated: ', value.username);
 	}
 
-	setMessage() {
-		userAuth.message = 'reee';
-	}
 }

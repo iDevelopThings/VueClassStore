@@ -2,7 +2,7 @@ const path = require('path');
 import fs from "fs";
 import {Configuration} from "../Configuration";
 import {StoreManager} from "./StoreManager";
-import {getTemplate, writeFile} from "../Utilities";
+import {correctPackageImportName, getTemplate, writeFile} from "../Utilities";
 
 export type PluginStoreImportsObject = {
 	moduleName: string;
@@ -49,6 +49,12 @@ export class PluginManager {
 		let template    = getTemplate('plugin', Configuration.vueVersion);
 		let defTemplate = getTemplate('vuestore-definition', Configuration.vueVersion);
 
+		if (Configuration.vueVersion === 2) {
+			let vueCompApiTemplate = getTemplate('vue-composition-api-plugin', Configuration.vueVersion);
+
+			writeFile(Configuration.vueCompositionInstallScriptFilePath, vueCompApiTemplate);
+		}
+
 		const definitions = StoreManager.stores.map(module => defTemplate
 			.replaceAll('{{name}}', module.name)
 			.replaceAll('{{camelName}}', module.camelName)
@@ -59,9 +65,16 @@ export class PluginManager {
 
 		template = template
 			.replaceAll('{{imports}}', imports)
-			.replaceAll('{{definitions}}', definitions);
+			.replaceAll('{{definitions}}', definitions)
+			.replaceAll('{{storeInits}}', StoreManager.stores.map(
+				module => `${module.globalName}.setupStore();`
+			).join("\n"));
 
 		writeFile(Configuration.vueStorePluginFilePath, template);
+	}
+
+	public static generateStoreMetaFile() {
+		writeFile(path.join(Configuration.pluginPath, 'stores.meta.json'), JSON.stringify(StoreManager.stores));
 	}
 
 	public static generateStoreClass() {
@@ -69,9 +82,18 @@ export class PluginManager {
 
 		const pluginPath = `./${Configuration.fileNames(false).plugin}`;
 
-		template = template.replaceAll('{{pluginPath}}', pluginPath);
+		template = template
+			.replaceAll('{{pluginPath}}', pluginPath)
+			.replaceAll('{{storeManagerImport}}', correctPackageImportName('./../../../dist'));
 
 		writeFile(Configuration.storeClassFilePath, template);
+	}
+
+	public static generateVueCompositionApiExportsFile() {
+		writeFile(
+			Configuration.vueCompositionExportsFilePath,
+			getTemplate('vue-composition-api-exports', Configuration.vueVersion),
+		);
 	}
 
 	public static clearFiles() {

@@ -56,6 +56,9 @@ export const ensureDirectoryExists = (pathToPrepare: string) => {
 		if (pathPart.endsWith(Configuration.fileExtension)) {
 			continue;
 		}
+		if (pathPart.endsWith('.json')) {
+			continue;
+		}
 
 		let pathCheck = path.join(pathBuilt, pathPart);
 
@@ -80,6 +83,17 @@ export const camelize = (str) => {
 	return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
 		return index === 0 ? word.toLowerCase() : word.toUpperCase();
 	}).replace(/\s+/g, '');
+};
+
+export const correctPackageImportName = (importString: string) => {
+	let importStringResponse = importString;
+
+	//Hacky fix to properly reference the packages directory
+	if (!process.cwd().includes('/Packages/VueClassStore')) {
+		importStringResponse = 'vue-class-stores';
+	}
+
+	return importStringResponse;
 };
 
 export const getTemplate = (name: string, vueVersion: number) => {

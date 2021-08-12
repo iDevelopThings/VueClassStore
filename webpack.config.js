@@ -1,7 +1,6 @@
 const path                   = require('path');
 const webpack                = require('webpack');
 const {VueLoaderPlugin}      = require('vue-loader');
-//const {VueClassStoresPlugin} = require('./dist');
 const {VueClassStoresLoader} = require('./dist/Webpack');
 
 module.exports = {
@@ -10,9 +9,9 @@ module.exports = {
 //		package : './src/index.ts',
 	},
 	output      : {
-		path       : path.resolve(__dirname, './apptestdist'),
-		publicPath : '/apptestdist/',
-		filename   : '[name].js',
+		path       : path.resolve(__dirname, './apptest'),
+		publicPath : '/apptest/',
+		filename   : '[name].dist.js',
 	},
 	module      : {
 		rules : [
@@ -53,12 +52,6 @@ module.exports = {
 	plugins     : [
 		new VueLoaderPlugin(),
 		new VueClassStoresLoader(),
-//		new VueClassStoresPlugin({
-//			usingTypescript     : true,
-//			shortVueDeclaration : true,
-//			pluginDirectory     : 'apptest/Stores/Plugin',
-//			storesDirectory     : 'apptest/Stores',
-//		}),
 	],
 	resolve     : {
 		extensions : ['.ts', '.js', '.vue', '.json'],

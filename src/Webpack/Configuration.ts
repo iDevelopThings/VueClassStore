@@ -3,6 +3,15 @@ import {VueVersionManager} from "./Managers/VueVersionManager";
 
 const packageJson = require(path.resolve(process.cwd(), 'package.json'));
 
+export type FileNames = {
+	stores: string,
+	definitions: string;
+	plugin: string;
+	storeClass: string;
+	vueCompApi: string;
+	vueCompApiExports: string;
+}
+
 export type PluginConfiguration = {
 	usingTypescript?: boolean;
 	pluginDirectory?: string;
@@ -40,6 +49,8 @@ export class Configuration {
 	public static storesFilePath?: string;
 	public static definitionsFilePath?: string;
 	public static vueStorePluginFilePath?: string;
+	public static vueCompositionInstallScriptFilePath?: string;
+	public static vueCompositionExportsFilePath?: string;
 	public static storeClassFilePath?: string;
 
 	public static setConfiguration(configuration?: PluginConfiguration) {
@@ -102,31 +113,47 @@ export class Configuration {
 			this.fileNames(true).plugin,
 		);
 
-		this.storeClassFilePath     = path.resolve(
+		this.vueCompositionExportsFilePath = path.resolve(
+			...this.pluginDirectory.split('/'),
+			this.fileNames(true).vueCompApiExports,
+		);
+
+		this.vueCompositionInstallScriptFilePath = path.resolve(
+			...this.pluginDirectory.split('/'),
+			this.fileNames(true).vueCompApi,
+		);
+
+		this.storeClassFilePath = path.resolve(
 			...this.pluginDirectory.split('/'),
 			this.fileNames(true).storeClass,
 		);
 	}
 
-	public static fileNames(withExtensions = false, absolutePath = false): { stores: string, definitions: string, plugin: string, storeClass: string } {
+	public static fileNames(withExtensions = false, absolutePath = false): FileNames {
 		const fileNames = {
-			stores      : 'VueStores',
-			definitions : 'VueClassStoresPluginTypes.d.ts',
-			plugin      : 'VueClassStoresPlugin',
-			storeClass  : 'Store',
+			stores            : 'VueStores',
+			definitions       : 'VueClassStoresPluginTypes.d.ts',
+			plugin            : 'VueClassStoresPlugin',
+			storeClass        : 'Store',
+			vueCompApi        : 'InstallVueCompositionApi',
+			vueCompApiExports : 'VueCompositionApiExports',
 		};
 
 		if (absolutePath) {
-			fileNames.storeClass  = path.join(this.pluginDirectory, fileNames.storeClass);
-			fileNames.stores      = path.join(this.pluginDirectory, fileNames.stores);
-			fileNames.definitions = path.join(this.pluginDirectory, fileNames.definitions);
-			fileNames.plugin      = path.join(this.pluginDirectory, fileNames.plugin);
+			fileNames.storeClass        = path.join(this.pluginDirectory, fileNames.storeClass);
+			fileNames.stores            = path.join(this.pluginDirectory, fileNames.stores);
+			fileNames.definitions       = path.join(this.pluginDirectory, fileNames.definitions);
+			fileNames.plugin            = path.join(this.pluginDirectory, fileNames.plugin);
+			fileNames.vueCompApi        = path.join(this.pluginDirectory, fileNames.vueCompApi);
+			fileNames.vueCompApiExports = path.join(this.pluginDirectory, fileNames.vueCompApiExports);
 		}
 
 		if (withExtensions) {
 			fileNames.storeClass += this.fileExtension;
 			fileNames.stores += this.fileExtension;
 			fileNames.plugin += this.fileExtension;
+			fileNames.vueCompApi += this.fileExtension;
+			fileNames.vueCompApiExports += this.fileExtension;
 		}
 
 
