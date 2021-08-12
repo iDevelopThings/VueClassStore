@@ -1,6 +1,6 @@
 import {DataTransferObjectManager} from "class-data-transfer-objects";
 import {LocalStorage} from "typesafe-local-storage";
-import {watchEffect, reactive, UnwrapNestedRefs, UnwrapRef} from "./VueCompositionApiExports";
+import {watchEffect, reactive, UnwrapRef} from "./VueCompositionApiExports";
 import {StoreModule, StoreWatcher} from './VueClassStoresPluginTypes';
 import {StoreManager} from '{{storeManagerImport}}';
 
@@ -42,9 +42,9 @@ export abstract class Store<T extends object> {
 	 * This is where you will modify state values.
 	 * For ex: this.state.user.username = 'Sam';
 	 *
-	 * @type {UnwrapNestedRefs<T> | T}
+	 * @type {UnwrapRef<T> | T}
 	 */
-	public state: UnwrapNestedRefs<T> | T = null;
+	public state: UnwrapRef<T> | T = null;
 
 	/**
 	 * An array of vue watch handlers.
