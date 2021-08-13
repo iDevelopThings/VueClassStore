@@ -5,7 +5,7 @@ export const {{name}}Symbol = Symbol();
 /**
  * @returns {{{name}}}
  */
-export function use{{name}}() {
+export function use{{name}}():{{name}} {
 	const store = inject({{name}}Symbol);
 
 	if (!store) {

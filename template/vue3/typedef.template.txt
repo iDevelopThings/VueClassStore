@@ -1,4 +1,4 @@
-import {WatchStopHandle} from './VueCompositionApiExports';
+import {WatchStopHandle} from 'vue';
 
 // Add this shim here due to conflict with vue3
 export declare module '*.vue' {

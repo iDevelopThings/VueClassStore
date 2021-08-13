@@ -1,8 +1,8 @@
 import {DataTransferObjectManager} from "class-data-transfer-objects";
 import {LocalStorage} from "typesafe-local-storage";
-import {watchEffect, reactive, UnwrapRef} from "./VueCompositionApiExports";
-import {StoreModule, StoreWatcher} from './VueClassStoresPluginTypes';
 import {StoreManager} from '{{storeManagerImport}}';
+import {StoreModule, StoreWatcher} from './VueClassStoresPluginTypes';
+import {reactive, UnwrapRef, watchEffect} from "vue";
 import {UnwrapNestedRefs} from "@vue/reactivity";
 
 /**
@@ -71,7 +71,13 @@ export abstract class Store<T extends object> {
 	private setup() {
 		this.state = observable(this.getInitialState()) as UnwrapNestedRefs<UnwrapRef<T>>;
 
+		if (this?.storeMeta?.persisted) {
+			this.onLoadedFromStorage();
+		}
+
 		this.setupWatchers();
+
+		this.initiated();
 	}
 
 	private getInitialState(): T {
@@ -79,11 +85,7 @@ export abstract class Store<T extends object> {
 			return this.initialState();
 		}
 
-		const state = {...this.initialState(), ...this.getStateFromStorage()};
-
-		this.onLoadedFromStorage();
-
-		return state;
+		return {...this.initialState(), ...this.getStateFromStorage()};
 	}
 
 	/**
@@ -169,8 +171,11 @@ export abstract class Store<T extends object> {
 		);
 	}
 
-
 	public onLoadedFromStorage() {
+
+	}
+
+	public initiated() {
 
 	}
 }
