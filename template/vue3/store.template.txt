@@ -3,17 +3,17 @@ import {LocalStorage} from "typesafe-local-storage";
 import {watchEffect, reactive, UnwrapRef} from "./VueCompositionApiExports";
 import {StoreModule, StoreWatcher} from './VueClassStoresPluginTypes';
 import {StoreManager} from '{{storeManagerImport}}';
-
+import {UnwrapNestedRefs} from "@vue/reactivity";
 
 /**
  * Use this method to define your reactive state object.
  * It's used by internals, but you can also use it yourself for other things.
  *
  * @param {O} state
- * @returns {UnwrapRef<O>}
+ * @returns {UnwrapNestedRefs<O>}
  */
-function observable<O extends object>(state: O) {
-	return reactive<O>(state as O);
+function observable<O extends object>(state: O): UnwrapNestedRefs<O> {
+	return reactive<O>(state);
 }
 
 /**
@@ -42,9 +42,9 @@ export abstract class Store<T extends object> {
 	 * This is where you will modify state values.
 	 * For ex: this.state.user.username = 'Sam';
 	 *
-	 * @type {UnwrapRef<T> | T}
+	 * @type {UnwrapNestedRefs<UnwrapRef<T>> | T}
 	 */
-	public state: UnwrapRef<T> | T = null;
+	public state: UnwrapNestedRefs<UnwrapRef<T>> | T = null;
 
 	/**
 	 * An array of vue watch handlers.
@@ -55,7 +55,7 @@ export abstract class Store<T extends object> {
 	 */
 	private watchers: StoreWatcher[] = [];
 
-	public storeMeta: { store: string, persisted: boolean };
+	private storeMeta: { store: string, persisted: boolean };
 
 	constructor() {
 		this.storeMeta = StoreManager.getStore(this.constructor.name);
@@ -69,7 +69,7 @@ export abstract class Store<T extends object> {
 	 * @private
 	 */
 	private setup() {
-		this.state = observable(this.getInitialState());
+		this.state = observable(this.getInitialState()) as UnwrapNestedRefs<UnwrapRef<T>>;
 
 		this.setupWatchers();
 	}
@@ -125,7 +125,7 @@ export abstract class Store<T extends object> {
 	 * @param {string} property
 	 * @returns {boolean}
 	 */
-	public hasWatcher(property: string): boolean {
+	private hasWatcher(property: string): boolean {
 		return this.watchers.some(watcher => watcher.property === property);
 	}
 
