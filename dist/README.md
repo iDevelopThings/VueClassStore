@@ -38,11 +38,11 @@ entirely different class/location.
 ## Installing the package
 
 ```shell
-npm install vue-class-stores typesafe-local-storage class-data-transfer-objects
-yarn add vue-class-stores typesafe-local-storage class-data-transfer-objects
+npm install vue-class-stores typesafe-local-storage 
+yarn add vue-class-stores typesafe-local-storage 
 ```
 
-typesafe-local-storage and class-data-transfer-objects are two of my other packages that make some features of this package a little easier to build/work with.
+typesafe-local-storage is one of my other packages that make some features of this package a little easier to build/work with.
 You should take a look at them also, they may help you with other things :)
 
 ## Configuring Webpack
