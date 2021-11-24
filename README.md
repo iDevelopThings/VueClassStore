@@ -50,11 +50,11 @@ You should take a look at them also, they may help you with other things :)
 Add the plugin to your webpack configuration:
 
 ```js
-const {VueClassStoresLoader} = require('vue-class-stores/Webpack');
+const {WebpackClassStoresLoader} = require('vue-class-stores/Webpack');
 
 module.exports = {
   plugins : [
-    new VueClassStoresLoader()
+    new WebpackClassStoresLoader()
   ]
 }
 ```
@@ -74,7 +74,7 @@ You can provide an object to the webpack plugin. Though, with this way, these op
 the [Generate Command](#Generate plugin/store files). So the next method is suggested.
 
 ```ts
-new VueClassStoresLoader({
+new WebpackClassStoresLoader({
   // true = Using typescript
   // false = Using javascript
   // Ensure you set this correctly!  

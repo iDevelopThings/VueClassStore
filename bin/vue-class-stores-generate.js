@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const {VueClassStoresLoader} = require("vue-class-stores/VueClassStoresLoader");
+const {generate} = require("vue-class-stores");
 
-VueClassStoresLoader.generate();
+generate();

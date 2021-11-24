@@ -1,3 +1,0 @@
-/** @type {{{name}}} */
-export const {{globalName}} = new {{name}}();
-export const {{name}}Symbol = Symbol();
