@@ -16,8 +16,8 @@ export function store(): ClassDecorator {
 	};
 }
 
-export function persistedStore(): ClassDecorator {
-	return function (target: Function): void {
-		StoreManager.setStore(target, true);
-	};
-}
+//export function persistedStore(): ClassDecorator {
+//	return function (target: Function): void {
+//		StoreManager.setStore(target, true);
+//	};
+//}

@@ -30,8 +30,6 @@
   "dependencies": {
     "@types/rollup": "^0.54.0",
     "chokidar": "^3.5.2",
-    "class-transformer": "^0.4.0",
-    "reflect-metadata": "^0.1.13",
     "require-context": "^1.1.0",
     "schema-utils": "^3.1.1",
     "semver": "^7.3.5",
@@ -46,7 +44,6 @@
     "@vue/test-utils": "^1.2.2",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
-    "class-data-transfer-objects": "^0.0.6",
     "crypto-browserify": "^3.12.0",
     "css-loader": "^6.2.0",
     "https-browserify": "^1.0.0",
