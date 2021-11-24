@@ -15,10 +15,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -36,7 +40,7 @@ var PluginManager = /** @class */ (function () {
     PluginManager.pluginStoreImportsObject = function () {
         return StoreManager_1.StoreManager.stores
             .map(function (m) {
-            var storePath = path.relative(path.resolve.apply(path, __spreadArray([], __read(Configuration_1.Configuration.pluginDirectory.split(path.sep)))), m.absolutePath).replace(Configuration_1.Configuration.fileExtension, '');
+            var storePath = path.relative(path.resolve.apply(path, __spreadArray([], __read(Configuration_1.Configuration.pluginDirectory.split(path.sep)), false)), m.absolutePath).replace(Configuration_1.Configuration.fileExtension, '');
             return {
                 moduleName: m.name,
                 importPath: storePath,
@@ -46,21 +50,21 @@ var PluginManager = /** @class */ (function () {
     PluginManager.generatePluginStoreImports = function () {
         this.pluginStoreImports = this.pluginStoreImportsObject()
             .map(function (m) {
-            return "import {" + m.moduleName + "} from \"" + m.importPath + "\";";
+            return "import {".concat(m.moduleName, "} from \"").concat(m.importPath, "\";");
         })
             .join("\n");
         var fileNamesImport = StoreManager_1.StoreManager.stores.map(function (m) { return m.globalName; });
         if (Configuration_1.Configuration.vueVersion === 3) {
-            fileNamesImport.push.apply(fileNamesImport, __spreadArray([], __read(StoreManager_1.StoreManager.stores.map(function (m) { return m.name + 'Symbol'; }))));
+            fileNamesImport.push.apply(fileNamesImport, __spreadArray([], __read(StoreManager_1.StoreManager.stores.map(function (m) { return m.name + 'Symbol'; })), false));
         }
-        this.vuePluginStoreImports = "import {" + fileNamesImport.join(', ') + "} from \"./" + Configuration_1.Configuration.fileNames(false).stores + "\"; \n";
+        this.vuePluginStoreImports = "import {".concat(fileNamesImport.join(', '), "} from \"./").concat(Configuration_1.Configuration.fileNames(false).stores, "\"; \n");
     };
     PluginManager.generatePlugin = function () {
-        var template = Utilities_1.getTemplate('plugin', Configuration_1.Configuration.vueVersion);
-        var defTemplate = Utilities_1.getTemplate('vuestore-definition', Configuration_1.Configuration.vueVersion);
+        var template = (0, Utilities_1.getTemplate)('plugin', Configuration_1.Configuration.vueVersion);
+        var defTemplate = (0, Utilities_1.getTemplate)('vuestore-definition', Configuration_1.Configuration.vueVersion);
         if (Configuration_1.Configuration.vueVersion === 2) {
-            var vueCompApiTemplate = Utilities_1.getTemplate('vue-composition-api-plugin', Configuration_1.Configuration.vueVersion);
-            Utilities_1.writeFile(Configuration_1.Configuration.vueCompositionInstallScriptFilePath, vueCompApiTemplate);
+            var vueCompApiTemplate = (0, Utilities_1.getTemplate)('vue-composition-api-plugin', Configuration_1.Configuration.vueVersion);
+            (0, Utilities_1.writeFile)(Configuration_1.Configuration.vueCompositionInstallScriptFilePath, vueCompApiTemplate);
         }
         var definitions = StoreManager_1.StoreManager.stores.map(function (module) { return defTemplate
             .replaceAll('{{name}}', module.name)
@@ -70,26 +74,26 @@ var PluginManager = /** @class */ (function () {
         template = template
             .replaceAll('{{imports}}', imports)
             .replaceAll('{{definitions}}', definitions)
-            .replaceAll('{{storeInits}}', StoreManager_1.StoreManager.stores.map(function (module) { return module.globalName + ".setupStore();"; }).join("\n"));
-        Utilities_1.writeFile(Configuration_1.Configuration.vueStorePluginFilePath, template);
+            .replaceAll('{{storeInits}}', StoreManager_1.StoreManager.stores.map(function (module) { return "".concat(module.globalName, ".setupStore();"); }).join("\n"));
+        (0, Utilities_1.writeFile)(Configuration_1.Configuration.vueStorePluginFilePath, template);
     };
     PluginManager.generateStoreMetaFile = function () {
-        Utilities_1.writeFile(path.join(Configuration_1.Configuration.pluginPath, 'stores.meta.json'), JSON.stringify(StoreManager_1.StoreManager.stores));
+        (0, Utilities_1.writeFile)(path.join(Configuration_1.Configuration.pluginPath, 'stores.meta.json'), JSON.stringify(StoreManager_1.StoreManager.stores));
     };
     PluginManager.generateStoreClass = function () {
-        var template = Utilities_1.getTemplate('store', Configuration_1.Configuration.vueVersion);
-        var pluginPath = "./" + Configuration_1.Configuration.fileNames(false).plugin;
+        var template = (0, Utilities_1.getTemplate)('store', Configuration_1.Configuration.vueVersion);
+        var pluginPath = "./".concat(Configuration_1.Configuration.fileNames(false).plugin);
         template = template
             .replaceAll('{{pluginPath}}', pluginPath)
-            .replaceAll('{{storeManagerImport}}', Utilities_1.correctPackageImportName(path.join('..', '..', '..', '..', 'dist')));
-        Utilities_1.writeFile(Configuration_1.Configuration.storeClassFilePath, template);
+            .replaceAll('{{storeManagerImport}}', (0, Utilities_1.correctPackageImportName)(path.join('..', '..', '..', '..', 'dist')));
+        (0, Utilities_1.writeFile)(Configuration_1.Configuration.storeClassFilePath, template);
     };
     PluginManager.generateVueCompositionApiExportsFile = function () {
-        Utilities_1.writeFile(Configuration_1.Configuration.vueCompositionExportsFilePath, Utilities_1.getTemplate('vue-composition-api-exports', Configuration_1.Configuration.vueVersion));
+        (0, Utilities_1.writeFile)(Configuration_1.Configuration.vueCompositionExportsFilePath, (0, Utilities_1.getTemplate)('vue-composition-api-exports', Configuration_1.Configuration.vueVersion));
     };
     PluginManager.clearFiles = function () {
         Object.values(Configuration_1.Configuration.fileNames(true)).forEach(function (name) {
-            var filePath = path.join.apply(path, __spreadArray(__spreadArray([], __read(Configuration_1.Configuration.pluginDirectory.split(path.sep))), [name]));
+            var filePath = path.join.apply(path, __spreadArray(__spreadArray([], __read(Configuration_1.Configuration.pluginDirectory.split(path.sep)), false), [name], false));
             if (fs_1.default.existsSync(filePath)) {
                 fs_1.default.rmSync(filePath);
             }

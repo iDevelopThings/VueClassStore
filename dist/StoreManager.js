@@ -44,7 +44,7 @@ var StoreManager = /** @class */ (function () {
      * @returns {string}
      */
     StoreManager.storeWatcherKey = function (target) {
-        return "store.watchers." + target.constructor.name;
+        return "store.watchers.".concat(target.constructor.name);
     };
     /**
      * Set a watcher for a store

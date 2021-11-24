@@ -20,7 +20,7 @@ var WebpackClassStoresLoader = /** @class */ (function () {
          WebpackClassStoresLoader.generate(undefined, this.configuration);
          });*/
         console.log('Re-generating vue-class-store loader files.');
-        Generate_1.generate(undefined, this.configuration);
+        (0, Generate_1.generate)(undefined, this.configuration);
         if (compiler.watching || compiler.watchMode) {
             this.setupWatcher();
         }
@@ -47,10 +47,10 @@ var WebpackClassStoresLoader = /** @class */ (function () {
             if (event !== 'add' && event !== 'unlink' && event !== 'change') {
                 return;
             }
-            if (Plugin_2.isInternallyGeneratedFile(filename)) {
+            if ((0, Plugin_2.isInternallyGeneratedFile)(filename)) {
                 return;
             }
-            Generate_1.generate(undefined, _this.configuration);
+            (0, Generate_1.generate)(undefined, _this.configuration);
             console.log('Re-generated vue-class-store files.');
         });
     };

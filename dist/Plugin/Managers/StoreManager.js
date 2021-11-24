@@ -40,10 +40,10 @@ var StoreManager = /** @class */ (function () {
     }
     StoreManager.loadStores = function () {
         var e_1, _a;
-        Utilities_1.ensureDirectoryExists(Configuration_1.Configuration.storesPath);
-        Utilities_1.ensureDirectoryExists(Configuration_1.Configuration.pluginPath);
+        (0, Utilities_1.ensureDirectoryExists)(Configuration_1.Configuration.storesPath);
+        (0, Utilities_1.ensureDirectoryExists)(Configuration_1.Configuration.pluginPath);
         this.stores = [];
-        var files = Utilities_1.walkDirectory(Configuration_1.Configuration.storesPath);
+        var files = (0, Utilities_1.walkDirectory)(Configuration_1.Configuration.storesPath);
         try {
             for (var files_1 = __values(files), files_1_1 = files_1.next(); !files_1_1.done; files_1_1 = files_1.next()) {
                 var _b = files_1_1.value, filePath = _b.filePath, isSubDir = _b.isSubDir;
@@ -53,8 +53,8 @@ var StoreManager = /** @class */ (function () {
                 var fileName = filePath.split(path.sep).pop();
                 var name_1 = fileName.split('.').shift();
                 var shortName = fileName.split('.').shift().replace('Store', '');
-                var camelName = Utilities_1.camelize(name_1);
-                var shortCamelName = Utilities_1.camelize(name_1).replace('Store', '');
+                var camelName = (0, Utilities_1.camelize)(name_1);
+                var shortCamelName = (0, Utilities_1.camelize)(name_1).replace('Store', '');
                 this.stores.push({
                     fileName: fileName,
                     name: name_1,
@@ -90,7 +90,7 @@ var StoreManager = /** @class */ (function () {
     };
     StoreManager.generateStoreExportsFile = function () {
         this.storeExports = '';
-        var exportsTemplate = Utilities_1.getTemplate('vuestore-exports', Configuration_1.Configuration.vueVersion);
+        var exportsTemplate = (0, Utilities_1.getTemplate)('vuestore-exports', Configuration_1.Configuration.vueVersion);
         if (Configuration_1.Configuration.vueVersion === 3) {
             this.storeExports += "import { inject } from 'vue';\n";
         }
@@ -99,14 +99,14 @@ var StoreManager = /** @class */ (function () {
             .replaceAll('{{name}}', store.name)
             .replaceAll('{{camelName}}', store.camelName)
             .replaceAll('{{globalName}}', store.globalName); }).join("\n");
-        Utilities_1.writeFile(Configuration_1.Configuration.storesFilePath, this.storeExports);
+        (0, Utilities_1.writeFile)(Configuration_1.Configuration.storesFilePath, this.storeExports);
     };
     StoreManager.generateTypeDefs = function () {
-        var template = Utilities_1.getTemplate('typedef', Configuration_1.Configuration.vueVersion);
+        var template = (0, Utilities_1.getTemplate)('typedef', Configuration_1.Configuration.vueVersion);
         template = template
             .replaceAll('{{imports}}', PluginManager_1.PluginManager.pluginStoreImports)
-            .replaceAll('{{definitions}}', this.stores.map(function (m) { return "\t\t$" + m.globalName + " : " + m.name; }).join(",\n"));
-        Utilities_1.writeFile(Configuration_1.Configuration.definitionsFilePath, template);
+            .replaceAll('{{definitions}}', this.stores.map(function (m) { return "\t\t$".concat(m.globalName, " : ").concat(m.name); }).join(",\n"));
+        (0, Utilities_1.writeFile)(Configuration_1.Configuration.definitionsFilePath, template);
     };
     StoreManager.stores = [];
     StoreManager.storeExports = null;

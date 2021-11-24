@@ -15,10 +15,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
@@ -56,14 +60,14 @@ var walkDirectory = function (directory, isSubDir) {
             files.push({ filePath: filePath, stat: stat, isSubDir: isSubDir });
         }
         else if (stat.isDirectory()) {
-            files.push.apply(files, __spreadArray([], __read(exports.walkDirectory(filePath, true))));
+            files.push.apply(files, __spreadArray([], __read((0, exports.walkDirectory)(filePath, true)), false));
         }
     });
     return files;
 };
 exports.walkDirectory = walkDirectory;
 var writeFile = function (path, content) {
-    exports.ensureDirectoryExists(path);
+    (0, exports.ensureDirectoryExists)(path);
     fs_1.default.writeFileSync(path, content);
 };
 exports.writeFile = writeFile;
@@ -141,7 +145,7 @@ var getTemplate = function (name, vueVersion) {
         rootPackageDir = rootPackageDir.replace('/vite-apptest', '');
         rootPackageDir = rootPackageDir.replace('/apptest', '');
     }
-    return fs_1.default.readFileSync(path_1.default.resolve(rootPackageDir, 'template', "vue" + vueVersion, name + ".template.txt"), { encoding: 'utf-8' });
+    return fs_1.default.readFileSync(path_1.default.resolve(rootPackageDir, 'template', "vue".concat(vueVersion), "".concat(name, ".template.txt")), { encoding: 'utf-8' });
 };
 exports.getTemplate = getTemplate;
 var isInternallyGeneratedFile = function (file) {

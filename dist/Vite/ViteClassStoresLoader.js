@@ -8,15 +8,15 @@ function ViteClassStoresLoader(configuration) {
     return {
         name: 'class-stores-loader',
         buildStart: function (options) {
-            Generate_1.generate(undefined, configuration);
+            (0, Generate_1.generate)(undefined, configuration);
             this.addWatchFile(Plugin_1.Configuration.storesPath);
         },
         handleHotUpdate: function (context) {
-            if (Plugin_1.isInternallyGeneratedFile(context.file)) {
+            if ((0, Plugin_1.isInternallyGeneratedFile)(context.file)) {
                 return [];
             }
             if (context.file.includes(Plugin_1.Configuration.storesDirectory)) {
-                Generate_1.generate(undefined, configuration);
+                (0, Generate_1.generate)(undefined, configuration);
             }
             return context.modules;
         }
