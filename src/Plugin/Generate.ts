@@ -1,9 +1,8 @@
-import {Compilation, WebpackError} from "webpack";
 import {Configuration, PluginConfiguration} from "./Configuration";
 import {PluginManager} from "./Managers/PluginManager";
 import {StoreManager} from "./Managers/StoreManager";
 
-export function generate(compilation?: Compilation, configuration?: PluginConfiguration) {
+export function generate(compilation?: any, configuration?: PluginConfiguration) {
 	Configuration.setConfiguration(configuration);
 
 	StoreManager.loadStores();
@@ -12,7 +11,7 @@ export function generate(compilation?: Compilation, configuration?: PluginConfig
 		const ERROR = 'VUE VERSION IS NOT 2 OR 3. CANNOT USE VUE CLASS STORE PLUGIN.';
 
 		if (compilation) {
-			compilation.errors.push(new WebpackError(ERROR));
+			compilation.errors.push(new Error(ERROR));
 
 			return;
 		}
