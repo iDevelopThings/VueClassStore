@@ -1,0 +1,106 @@
+{
+  "name": "vue-class-stores",
+  "version": "0.0.49",
+  "description": "Use classes to handle state in vuejs. This is a webpack plugin that will generate type definitions and globally init your stores.\n\nTopics\nResources\n",
+  "scripts": {
+    "build": "webpack --mode=development",
+    "prod": "webpack --mode=production",
+    "watch": "webpack --watch --mode=development",
+    "build-package": "tsc --build tsconfig.prod.json --clean && tsc --build tsconfig.prod.json",
+    "build-package-watch": "tsc --build tsconfig.prod.json --clean && tsc --build tsconfig.prod.json --watch",
+    "test": "jest",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
+    "generate-class-stores": "node generate.js",
+    "generate-dev": "node dist/generate.js",
+    "deploy-update": "./dist.sh"
+  },
+  "bin": {
+    "vue-class-stores-generate": "bin/vue-class-stores-generate.js"
+  },
+  "keywords": [],
+  "repository": {
+    "url": "https://github.com/iDevelopThings/VueClassStore",
+    "type": "github"
+  },
+  "author": {
+    "name": "iDevelopThings",
+    "url": "https://github.com/iDevelopThings"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/rollup": "^0.54.0",
+    "chokidar": "^3.5.2",
+    "class-transformer": "^0.4.0",
+    "reflect-metadata": "^0.1.13",
+    "require-context": "^1.1.0",
+    "schema-utils": "^3.1.1",
+    "semver": "^7.3.5",
+    "vite": "^2.6.14"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "@types/loader-runner": "^2.2.4",
+    "@types/webpack": "^5.28.0",
+    "@types/webpack-env": "^1.16.2",
+    "@vue/composition-api": "^1.1.0",
+    "@vue/test-utils": "^1.2.2",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "class-data-transfer-objects": "^0.0.6",
+    "crypto-browserify": "^3.12.0",
+    "css-loader": "^6.2.0",
+    "https-browserify": "^1.0.0",
+    "jest": "^27.0.6",
+    "loader-utils": "^2.0.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "ts-jest": "^27.0.4",
+    "ts-loader": "^9.2.5",
+    "typesafe-local-storage": "^0.0.7",
+    "typescript": "^4.3.5",
+    "url": "^0.11.0",
+    "util": "^0.12.4",
+    "vm-browserify": "^1.1.2",
+    "vue": "^2.6.14",
+    "vue-class-component": "^7.2.6",
+    "vue-jest": "^3.0.7",
+    "vue-loader": "^15.9.8",
+    "vue-property-decorator": "^9.1.2",
+    "vue-router": "^3.5.2",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^5.48.0",
+    "webpack-cli": "^4.7.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "vue"
+    ],
+    "modulePaths": [
+      "<rootDir>/src",
+      "<rootDir>/node_modules"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
+      ".*\\.(ts)$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "globals": {
+      "vue-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
+  },
+  "vue-class-stores": {
+    "usingTypescript": true,
+    "shortVueDeclaration": true,
+    "pluginDirectory": "apptest/Stores/Plugin",
+    "storesDirectory": "apptest/Stores"
+  }
+}
