@@ -1,5 +1,3 @@
-import {DataTransferObjectManager} from "class-data-transfer-objects";
-import {LocalStorage} from "typesafe-local-storage";
 import {StoreManager} from '{{storeManagerImport}}';
 import {StoreModule, StoreWatcher} from './VueClassStoresPluginTypes';
 import {reactive, UnwrapRef, watchEffect} from "vue";
@@ -164,12 +162,12 @@ export abstract class Store<T extends object> {
 	 * @param {T} value
 	 * @private
 	 */
-	private _stateChanged(value: T) {
-		LocalStorage.set(
-			`state:${this.constructor.name}`,
-			DataTransferObjectManager.serialization().serialize(value)
-		);
-	}
+//	private _stateChanged(value: T) {
+//		LocalStorage.set(
+//			`state:${this.constructor.name}`,
+//			DataTransferObjectManager.serialization().serialize(value)
+//		);
+//	}
 
 	/*public onLoadedFromStorage() {
 

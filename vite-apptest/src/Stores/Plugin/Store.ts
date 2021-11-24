@@ -1,4 +1,3 @@
-import {DataTransferObjectManager} from "class-data-transfer-objects";
 import {LocalStorage} from "typesafe-local-storage";
 import {StoreManager} from '../../../../dist';
 import {StoreModule, StoreWatcher} from './VueClassStoresPluginTypes';
