@@ -15,11 +15,11 @@
       "DOM"
     ],
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "node_modules/vite/types"
     ],
     "types" : [
       "node",
-      "vite/types"
     ],
     "downlevelIteration": true
   },
