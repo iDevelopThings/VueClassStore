@@ -1,9 +1,0 @@
-{{imports}}
-
-export const VueClassStoresPlugin = {
-	install : (Vue, options) => {
-{{definitions}}
-	}
-};
-
-
